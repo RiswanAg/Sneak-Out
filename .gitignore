@@ -83,9 +83,3 @@ desktop.ini
 /Assets/TerrainDemoScene_URP/
 /Assets/TextMesh Pro/
 /Assets/nappin/
-
-# Stray installers that don't belong in the project
-/Assets/Sprite/EpicInstaller-19.0.0.msi
-/Assets/Sprite/EpicInstaller-19.0.0.msi.meta
-/Assets/Sprite/Thunderstore Mod Manager - Installer.exe
-/Assets/Sprite/Thunderstore Mod Manager - Installer.exe.meta

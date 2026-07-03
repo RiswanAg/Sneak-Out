@@ -29,7 +29,7 @@ public class SwitchLight : MonoBehaviourPun
                 l.enabled = state;
         }
         
-        Debug.Log($"Lights toggled: {state}");
+        GameLog.Log($"Lights toggled: {state}");
     }
 
     private void OnTriggerEnter(Collider other)

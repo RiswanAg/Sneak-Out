@@ -65,13 +65,13 @@ public class WiresModule : MonoBehaviour
         correctWireIndex = CalculateCorrectWire();
         SetupWireUI();
         
-        Debug.Log($"<color=cyan>=== WIRES MODULE ===</color>");
-        Debug.Log($"<color=cyan>Wire count: {numberOfWires}</color>");
+        GameLog.Log($"<color=cyan>=== WIRES MODULE ===</color>");
+        GameLog.Log($"<color=cyan>Wire count: {numberOfWires}</color>");
         for (int i = 0; i < currentWires.Count; i++)
         {
-            Debug.Log($"<color=cyan>Wire {i + 1}: {currentWires[i]}</color>");
+            GameLog.Log($"<color=cyan>Wire {i + 1}: {currentWires[i]}</color>");
         }
-        Debug.Log($"<color=lime>Correct wire to cut: {correctWireIndex + 1}</color>");
+        GameLog.Log($"<color=lime>Correct wire to cut: {correctWireIndex + 1}</color>");
     }
     
     void SetupWireUI()
@@ -124,7 +124,7 @@ public class WiresModule : MonoBehaviour
             if (script != null && script.GetType().Name == "WireVisual")
             {
                 script.enabled = false;
-                Debug.Log($"<color=orange>Disabled WireVisual on {wireButtonObj.name}</color>");
+                GameLog.Log($"<color=orange>Disabled WireVisual on {wireButtonObj.name}</color>");
             }
         }
     }
@@ -145,7 +145,7 @@ public class WiresModule : MonoBehaviour
     {
         if (!isActive || isComplete) return;
         
-        Debug.Log($"<color=orange>Cut wire {wireIndex + 1} ({currentWires[wireIndex]})</color>");
+        GameLog.Log($"<color=orange>Cut wire {wireIndex + 1} ({currentWires[wireIndex]})</color>");
         
         if (wireImages != null && wireIndex < wireImages.Length && wireImages[wireIndex] != null)
         {
@@ -159,7 +159,7 @@ public class WiresModule : MonoBehaviour
         
         if (wireIndex == correctWireIndex)
         {
-            Debug.Log("<color=lime>✓ Correct wire cut!</color>");
+            GameLog.Log("<color=lime>✓ Correct wire cut!</color>");
             isComplete = true;
             
             if (ControlPanelManager.Instance != null)
@@ -167,7 +167,7 @@ public class WiresModule : MonoBehaviour
         }
         else
         {
-            Debug.Log("<color=red>✗ Wrong wire! STRIKE!</color>");
+            GameLog.Log("<color=red>✗ Wrong wire! STRIKE!</color>");
             
             if (audioSource != null && wrongSound != null)
                 audioSource.PlayOneShot(wrongSound);

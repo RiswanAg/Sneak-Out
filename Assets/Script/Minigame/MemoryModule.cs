@@ -78,7 +78,7 @@ public class MemoryModule : MonoBehaviour
         SetupStage();
         UpdateStageUI();
         
-        Debug.Log("=== MEMORY MODULE INITIALIZED ===");
+        GameLog.Log("=== MEMORY MODULE INITIALIZED ===");
     }
     
     /// <summary>
@@ -109,12 +109,12 @@ public class MemoryModule : MonoBehaviour
         }
         
         // Debug log
-        Debug.Log($"=== STAGE {currentStage + 1} ===");
-        Debug.Log($"Display: {displayNumber}");
-        Debug.Log($"Button labels (left to right): {currentButtonLabels[0]}, {currentButtonLabels[1]}, {currentButtonLabels[2]}, {currentButtonLabels[3]}");
+        GameLog.Log($"=== STAGE {currentStage + 1} ===");
+        GameLog.Log($"Display: {displayNumber}");
+        GameLog.Log($"Button labels (left to right): {currentButtonLabels[0]}, {currentButtonLabels[1]}, {currentButtonLabels[2]}, {currentButtonLabels[3]}");
         
         int correctPos = GetCorrectPosition();
-        Debug.Log($"Correct position: {correctPos + 1} (label: {currentButtonLabels[correctPos]})");
+        GameLog.Log($"Correct position: {correctPos + 1} (label: {currentButtonLabels[correctPos]})");
     }
     
     void ShuffleButtonLabels()
@@ -155,7 +155,7 @@ public class MemoryModule : MonoBehaviour
         
         int pressedLabel = currentButtonLabels[position];
         
-        Debug.Log($"Pressed position {position + 1}, label {pressedLabel}");
+        GameLog.Log($"Pressed position {position + 1}, label {pressedLabel}");
         
         // Play click sound
         if (audioSource != null && buttonClickSound != null)
@@ -167,7 +167,7 @@ public class MemoryModule : MonoBehaviour
         if (position == correctPosition)
         {
             // CORRECT!
-            Debug.Log("Correct!");
+            GameLog.Log("Correct!");
             
             // Remember what was pressed
             pressedPositions.Add(position);
@@ -184,7 +184,7 @@ public class MemoryModule : MonoBehaviour
             if (currentStage >= 3)
             {
                 // ALL STAGES COMPLETE!
-                Debug.Log("MEMORY MODULE COMPLETE!");
+                GameLog.Log("MEMORY MODULE COMPLETE!");
                 isComplete = true;
                 
                 // Disable buttons
@@ -206,7 +206,7 @@ public class MemoryModule : MonoBehaviour
         else
         {
             // WRONG!
-            Debug.Log($"Wrong! Expected position {correctPosition + 1}");
+            GameLog.Log($"Wrong! Expected position {correctPosition + 1}");
             
             if (audioSource != null && wrongSound != null)
                 audioSource.PlayOneShot(wrongSound);

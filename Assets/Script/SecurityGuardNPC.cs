@@ -131,7 +131,7 @@ public class SecurityGuardNPC : MonoBehaviourPun, ISoundListener
         currentPatrolPoints = guardPostPatrolPoints;
         StartCoroutine(PatrolRoutine());
 
-        Debug.Log($"<color=cyan>[Guard] Security Guard initialized - Mode: {currentMode}</color>");
+        GameLog.Log($"<color=cyan>[Guard] Security Guard initialized - Mode: {currentMode}</color>");
     }
 
     void Update()
@@ -268,7 +268,7 @@ public class SecurityGuardNPC : MonoBehaviourPun, ISoundListener
 
     void OnPlayerDetected(GameObject player)
     {
-        Debug.Log($"<color=red>[Guard] PLAYER SPOTTED! Starting chase!</color>");
+        GameLog.Log($"<color=red>[Guard] PLAYER SPOTTED! Starting chase!</color>");
 
         targetPlayer = player;
         lastKnownPlayerPosition = player.transform.position;
@@ -287,7 +287,7 @@ public class SecurityGuardNPC : MonoBehaviourPun, ISoundListener
         if (targetPlayer == null)
         {
             // Lost target
-            Debug.Log("[Guard] Lost target, investigating last position...");
+            GameLog.Log("[Guard] Lost target, investigating last position...");
             currentMode = GuardMode.Investigating;
             StartCoroutine(InvestigateLocation(lastKnownPlayerPosition));
             return;
@@ -321,7 +321,7 @@ public class SecurityGuardNPC : MonoBehaviourPun, ISoundListener
 
     void CatchPlayer()
     {
-        Debug.Log("<color=red>[Guard] PLAYER CAUGHT!</color>");
+        GameLog.Log("<color=red>[Guard] PLAYER CAUGHT!</color>");
 
         currentMode = GuardMode.Catching;
         UpdateAnimation(false, false, false);
@@ -369,7 +369,7 @@ public class SecurityGuardNPC : MonoBehaviourPun, ISoundListener
         if (soundType == SoundType.VeryQuiet || soundType == SoundType.Silent)
             return;
 
-        Debug.Log($"<color=yellow>[Guard] Heard sound at distance {distance:F1}m - Investigating!</color>");
+        GameLog.Log($"<color=yellow>[Guard] Heard sound at distance {distance:F1}m - Investigating!</color>");
 
         // Investigate sound
         if (!isInvestigating)
@@ -384,7 +384,7 @@ public class SecurityGuardNPC : MonoBehaviourPun, ISoundListener
     {
         isInvestigating = true;
 
-        Debug.Log($"[Guard] Investigating location: {location}");
+        GameLog.Log($"[Guard] Investigating location: {location}");
 
         // Walk to sound location
         if (agent != null && agent.isOnNavMesh)
@@ -408,7 +408,7 @@ public class SecurityGuardNPC : MonoBehaviourPun, ISoundListener
             yield return new WaitForSeconds(investigationTime);
 
             // Resume patrol
-            Debug.Log("[Guard] Investigation complete, resuming patrol");
+            GameLog.Log("[Guard] Investigation complete, resuming patrol");
             currentMode = previousMode;
             UpdateAnimation(false, false, false);
         }
@@ -432,7 +432,7 @@ public class SecurityGuardNPC : MonoBehaviourPun, ISoundListener
     {
         if (!PhotonNetwork.IsMasterClient) return;
 
-        Debug.Log("<color=green>[Guard] Activating patrol mode - Going to control room!</color>");
+        GameLog.Log("<color=green>[Guard] Activating patrol mode - Going to control room!</color>");
 
         // Enable sound detection
         canHearSounds = true;
@@ -452,7 +452,7 @@ public class SecurityGuardNPC : MonoBehaviourPun, ISoundListener
 
     IEnumerator GoToControlRoom()
     {
-        Debug.Log("[Guard] Walking to control room...");
+        GameLog.Log("[Guard] Walking to control room...");
 
         // Make sure we have control room patrol points
         if (controlRoomPatrolPoints == null || controlRoomPatrolPoints.Length == 0)
@@ -476,7 +476,7 @@ public class SecurityGuardNPC : MonoBehaviourPun, ISoundListener
                 yield return null;
             }
 
-            Debug.Log("[Guard] Reached control room - Starting patrol!");
+            GameLog.Log("[Guard] Reached control room - Starting patrol!");
 
             // Switch to control room patrol
             currentMode = GuardMode.PatrolControlRoom;

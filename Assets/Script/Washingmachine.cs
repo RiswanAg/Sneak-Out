@@ -120,7 +120,7 @@ public class WashingMachine : MonoBehaviour
             if (room != null)
             {
                 roomID = room.roomID;
-                Debug.Log($"[WashingMachine] Auto-detected Room {roomID}");
+                GameLog.Log($"[WashingMachine] Auto-detected Room {roomID}");
                 return;
             }
         }
@@ -133,7 +133,7 @@ public class WashingMachine : MonoBehaviour
             if (room != null)
             {
                 roomID = room.roomID;
-                Debug.Log($"[WashingMachine] Auto-detected Room {roomID} via raycast");
+                GameLog.Log($"[WashingMachine] Auto-detected Room {roomID} via raycast");
             }
         }
     }
@@ -183,7 +183,7 @@ public class WashingMachine : MonoBehaviour
         currentTimer = delay;
         timerActive = true;
         
-        Debug.Log($"[WashingMachine] Timer set: {delay} seconds");
+        GameLog.Log($"[WashingMachine] Timer set: {delay} seconds");
         
         // Play timer set sound
         if (timerSetSound != null && audioSource != null)
@@ -209,7 +209,7 @@ public class WashingMachine : MonoBehaviour
         timerActive = false;
         currentTimer = 0f;
         
-        Debug.Log("[WashingMachine] Timer cancelled");
+        GameLog.Log("[WashingMachine] Timer cancelled");
         
         if (timerText != null)
         {
@@ -226,7 +226,7 @@ public class WashingMachine : MonoBehaviour
     {
         if (isRunning) return;
         
-        Debug.Log("[WashingMachine] STARTING!");
+        GameLog.Log("[WashingMachine] STARTING!");
         
         isRunning = true;
         SetMachineState(true);
@@ -268,7 +268,7 @@ public class WashingMachine : MonoBehaviour
     {
         if (!isRunning) return;
         
-        Debug.Log("[WashingMachine] STOPPING!");
+        GameLog.Log("[WashingMachine] STOPPING!");
         
         isRunning = false;
         SetMachineState(false);
@@ -331,7 +331,7 @@ public class WashingMachine : MonoBehaviour
             return;
         }
         
-        Debug.Log($"[WashingMachine] Emitting {soundType} sound at Room {roomID}");
+        GameLog.Log($"[WashingMachine] Emitting {soundType} sound at Room {roomID}");
         
         // ✅ NEW: Notify CikguNPC directly with room information
         // Find all CikguNPC instances and notify them
@@ -341,7 +341,7 @@ public class WashingMachine : MonoBehaviour
             // Call OnSoundHeardWithRoom which CikguNPC actually processes
             float distance = Vector3.Distance(transform.position, cikgu.GetPosition());
             cikgu.OnSoundHeardWithRoom(transform.position, soundType, distance, roomID, gameObject);
-            Debug.Log($"[WashingMachine] Notified CikguNPC at distance {distance}m");
+            GameLog.Log($"[WashingMachine] Notified CikguNPC at distance {distance}m");
         }
         
         // ✅ ALSO: Emit regular sound for StudentNPCs (they use the old system)
@@ -363,7 +363,7 @@ public class WashingMachine : MonoBehaviour
             if (pv != null && !pv.IsMine) return;
             
             playerNear = true;
-            Debug.Log("[WashingMachine] Player nearby");
+            GameLog.Log("[WashingMachine] Player nearby");
             
             // Notify UI
             if (washingMachineUI != null)

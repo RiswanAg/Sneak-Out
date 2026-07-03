@@ -90,7 +90,7 @@ public class CCTVMonitor : MonoBehaviour
         if (cameraTexture != null)
         {
             screenMaterial.mainTexture = cameraTexture;
-            Debug.Log($"Monitor '{gameObject.name}' showing feed from '{camera.gameObject.name}'");
+            GameLog.Log($"Monitor '{gameObject.name}' showing feed from '{camera.gameObject.name}'");
         }
         else
         {

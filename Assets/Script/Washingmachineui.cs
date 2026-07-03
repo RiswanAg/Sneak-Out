@@ -208,7 +208,7 @@ public class WashingMachineUI : MonoBehaviour
         // Pause player movement (optional)
         // Time.timeScale = 0f; // Uncomment if you want to pause game
         
-        Debug.Log("[WashingMachineUI] Panel opened");
+        GameLog.Log("[WashingMachineUI] Panel opened");
     }
     
     void ClosePanel()
@@ -225,7 +225,7 @@ public class WashingMachineUI : MonoBehaviour
         // Resume game
         // Time.timeScale = 1f;
         
-        Debug.Log("[WashingMachineUI] Panel closed");
+        GameLog.Log("[WashingMachineUI] Panel closed");
     }
     
     void ShowStatusPanel()
@@ -291,7 +291,7 @@ public class WashingMachineUI : MonoBehaviour
         
         float timerValue = timerSlider != null ? timerSlider.value : defaultTimer;
         
-        Debug.Log($"[WashingMachineUI] Starting timer: {timerValue}s");
+        GameLog.Log($"[WashingMachineUI] Starting timer: {timerValue}s");
         
         // Start the washing machine timer
         washingMachine.SetTimer(timerValue);
@@ -317,7 +317,7 @@ public class WashingMachineUI : MonoBehaviour
         
         HideStatusPanel();
         
-        Debug.Log("[WashingMachineUI] Timer cancelled");
+        GameLog.Log("[WashingMachineUI] Timer cancelled");
     }
     
     // ==================== PLAYER DETECTION ====================
@@ -328,7 +328,7 @@ public class WashingMachineUI : MonoBehaviour
     public void OnPlayerEnter()
     {
         playerNear = true;
-        Debug.Log("[WashingMachineUI] Player entered range");
+        GameLog.Log("[WashingMachineUI] Player entered range");
         
         // If machine is already running, show status
         if (washingMachine != null && washingMachine.isRunning)
@@ -354,7 +354,7 @@ public class WashingMachineUI : MonoBehaviour
         playerNear = false;
         ClosePanel();
         HideStatusPanel(); // Also hide status when leaving
-        Debug.Log("[WashingMachineUI] Player exited range");
+        GameLog.Log("[WashingMachineUI] Player exited range");
     }
     
     // ==================== PUBLIC METHODS ====================

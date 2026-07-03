@@ -115,7 +115,7 @@ public class Level1Manager : MonoBehaviourPunCallbacks
         
         if (failedPlayers.Contains(player)) return;
         
-        Debug.Log($"[Level1] Player {player.name} FAILED!");
+        GameLog.Log($"[Level1] Player {player.name} FAILED!");
         
         failedPlayers.Add(player);
         FreezePlayer(player);
@@ -127,7 +127,7 @@ public class Level1Manager : MonoBehaviourPunCallbacks
     
     void FreezePlayer(GameObject player)
     {
-        Debug.Log($"[Level1] Freezing player: {player.name}");
+        GameLog.Log($"[Level1] Freezing player: {player.name}");
         
         var controller = player.GetComponent<CharacterController>();
         if (controller != null) controller.enabled = false;
@@ -221,7 +221,7 @@ public class Level1Manager : MonoBehaviourPunCallbacks
         if (levelComplete) return;
         levelComplete = true;
         
-        Debug.Log("[Level1] ✅ VICTORY! Both players succeeded!");
+        GameLog.Log("[Level1] ✅ VICTORY! Both players succeeded!");
         
         // Play victory sound
         if (audioSource != null && victorySound != null)
@@ -252,7 +252,7 @@ public class Level1Manager : MonoBehaviourPunCallbacks
     /// </summary>
     void LoadCutsceneScene()
     {
-        Debug.Log($"[Level1] Loading cutscene: {victoryCutsceneScene}");
+        GameLog.Log($"[Level1] Loading cutscene: {victoryCutsceneScene}");
         
         // ✅ PhotonNetwork.LoadLevel syncs for all players
         PhotonNetwork.LoadLevel(victoryCutsceneScene);
@@ -263,7 +263,7 @@ public class Level1Manager : MonoBehaviourPunCallbacks
     /// </summary>
     void LoadNextLevel()
     {
-        Debug.Log($"[Level1] Loading next level: {nextLevelScene}");
+        GameLog.Log($"[Level1] Loading next level: {nextLevelScene}");
         PhotonNetwork.LoadLevel(nextLevelScene);
     }
     
@@ -274,7 +274,7 @@ public class Level1Manager : MonoBehaviourPunCallbacks
         if (isRestarting) return;
         isRestarting = true;
         
-        Debug.Log("[Level1] RestartLevel called!");
+        GameLog.Log("[Level1] RestartLevel called!");
         
         Time.timeScale = 1f;
         
@@ -294,7 +294,7 @@ public class Level1Manager : MonoBehaviourPunCallbacks
     [PunRPC]
     void RPC_RestartForEveryone()
     {
-        Debug.Log("[Level1] RPC_RestartForEveryone received! Reloading scene...");
+        GameLog.Log("[Level1] RPC_RestartForEveryone received! Reloading scene...");
         
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
@@ -309,11 +309,11 @@ public class Level1Manager : MonoBehaviourPunCallbacks
     
     void CleanupBeforeRestart()
     {
-        Debug.Log("[Level1] Cleaning up before restart...");
+        GameLog.Log("[Level1] Cleaning up before restart...");
         
         if (PhotonNetwork.LocalPlayer.TagObject != null)
         {
-            Debug.Log("[Level1] Clearing TagObject reference");
+            GameLog.Log("[Level1] Clearing TagObject reference");
             PhotonNetwork.LocalPlayer.TagObject = null;
         }
         
@@ -326,7 +326,7 @@ public class Level1Manager : MonoBehaviourPunCallbacks
         yield return null;
         yield return null;
         
-        Debug.Log("[Level1] Loading scene now...");
+        GameLog.Log("[Level1] Loading scene now...");
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     

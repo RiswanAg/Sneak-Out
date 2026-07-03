@@ -31,37 +31,37 @@ public class ItemPickup : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("=== ItemPickup: Start() called ===");
+        GameLog.Log("=== ItemPickup: Start() called ===");
 
         // Check if this is a networked player
         PhotonView pv = GetComponent<PhotonView>();
         if (pv != null)
         {
             isLocalPlayer = pv.IsMine;
-            Debug.Log($"ItemPickup: PhotonView found. IsMine = {isLocalPlayer}");
+            GameLog.Log($"ItemPickup: PhotonView found. IsMine = {isLocalPlayer}");
             
             if (!isLocalPlayer)
             {
-                Debug.Log("ItemPickup: Not local player, disabling");
+                GameLog.Log("ItemPickup: Not local player, disabling");
                 enabled = false;
                 return;
             }
         }
         else
         {
-            Debug.Log("ItemPickup: No PhotonView (single player mode)");
+            GameLog.Log("ItemPickup: No PhotonView (single player mode)");
             isLocalPlayer = true;
         }
 
         // Find camera
         if (playerCamera == null)
         {
-            Debug.Log("ItemPickup: Camera not assigned, searching...");
+            GameLog.Log("ItemPickup: Camera not assigned, searching...");
             playerCamera = Camera.main?.transform;
             
             if (playerCamera != null)
             {
-                Debug.Log($"ItemPickup: Found camera: {playerCamera.name}");
+                GameLog.Log($"ItemPickup: Found camera: {playerCamera.name}");
             }
             else
             {
@@ -70,7 +70,7 @@ public class ItemPickup : MonoBehaviour
         }
         else
         {
-            Debug.Log($"ItemPickup: Camera already assigned: {playerCamera.name}");
+            GameLog.Log($"ItemPickup: Camera already assigned: {playerCamera.name}");
         }
 
         cameraFound = (playerCamera != null);
@@ -78,12 +78,12 @@ public class ItemPickup : MonoBehaviour
         // Find inventory
         if (inventory == null)
         {
-            Debug.Log("ItemPickup: Inventory not assigned, searching...");
+            GameLog.Log("ItemPickup: Inventory not assigned, searching...");
             inventory = GetComponent<InventorySystem>();
             
             if (inventory != null)
             {
-                Debug.Log("ItemPickup: Found InventorySystem on this GameObject");
+                GameLog.Log("ItemPickup: Found InventorySystem on this GameObject");
             }
             else
             {
@@ -92,12 +92,12 @@ public class ItemPickup : MonoBehaviour
         }
         else
         {
-            Debug.Log("ItemPickup: Inventory already assigned");
+            GameLog.Log("ItemPickup: Inventory already assigned");
         }
 
         inventoryFound = (inventory != null);
 
-        Debug.Log("=== ItemPickup Setup Complete ===");
+        GameLog.Log("=== ItemPickup Setup Complete ===");
     }
 
     void Update()
@@ -145,7 +145,7 @@ public class ItemPickup : MonoBehaviour
                 
                 if (Input.GetMouseButtonDown(0) && pickupCooldown <= 0f)
                 {
-                    Debug.Log("=== LEFT MOUSE CLICKED ===");
+                    GameLog.Log("=== LEFT MOUSE CLICKED ===");
                     TryPickupItem(item);
                     pickupCooldown = PICKUP_COOLDOWN_TIME;
                 }
@@ -171,7 +171,7 @@ public class ItemPickup : MonoBehaviour
             return;
         }
         
-        Debug.Log($"TryPickupItem() called for: {item.itemName}");
+        GameLog.Log($"TryPickupItem() called for: {item.itemName}");
 
         // ✅ CHECK: Is this a consumable that should be consumed on pickup?
         ConsumableItem consumable = item as ConsumableItem;
@@ -183,7 +183,7 @@ public class ItemPickup : MonoBehaviour
         
         if (consumable != null && consumable.consumeOnPickup)
         {
-            Debug.Log($"[ItemPickup] {item.itemName} is consumable - consuming on pickup!");
+            GameLog.Log($"[ItemPickup] {item.itemName} is consumable - consuming on pickup!");
             
             // Disable collider immediately
             Collider itemCollider = item.GetComponent<Collider>();
@@ -224,7 +224,7 @@ public class ItemPickup : MonoBehaviour
 
         if (success)
         {
-            Debug.Log($"SUCCESS! Picked up: {item.itemName}");
+            GameLog.Log($"SUCCESS! Picked up: {item.itemName}");
             currentLookingAtItem = null;
             lookingAtItem = "Nothing";
         }

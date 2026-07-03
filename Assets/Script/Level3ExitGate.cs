@@ -76,7 +76,7 @@ public class Level3ExitGate : MonoBehaviourPun
             ? PhotonNetwork.LocalPlayer.CustomProperties["character"].ToString() 
             : (PhotonNetwork.IsMasterClient ? "Hazim" : "Amir");
         
-        Debug.Log($"<color=green>[Checkpoint] {character} reached the checkpoint!</color>");
+        GameLog.Log($"<color=green>[Checkpoint] {character} reached the checkpoint!</color>");
         
         // Notify all clients that this player arrived
         photonView.RPC("RPC_PlayerArrived", RpcTarget.AllBuffered, character);
@@ -95,7 +95,7 @@ public class Level3ExitGate : MonoBehaviourPun
             ? PhotonNetwork.LocalPlayer.CustomProperties["character"].ToString() 
             : (PhotonNetwork.IsMasterClient ? "Hazim" : "Amir");
         
-        Debug.Log($"<color=yellow>[Checkpoint] {character} left the checkpoint area</color>");
+        GameLog.Log($"<color=yellow>[Checkpoint] {character} left the checkpoint area</color>");
         
         // Notify all clients that this player left
         photonView.RPC("RPC_PlayerLeft", RpcTarget.AllBuffered, character);
@@ -113,7 +113,7 @@ public class Level3ExitGate : MonoBehaviourPun
             {
                 player1AtGate = true;
                 playersAtGate++;
-                Debug.Log($"[Checkpoint] Hazim arrived! ({playersAtGate}/2 players)");
+                GameLog.Log($"[Checkpoint] Hazim arrived! ({playersAtGate}/2 players)");
             }
         }
         else if (character == "Amir")
@@ -122,14 +122,14 @@ public class Level3ExitGate : MonoBehaviourPun
             {
                 player2AtGate = true;
                 playersAtGate++;
-                Debug.Log($"[Checkpoint] Amir arrived! ({playersAtGate}/2 players)");
+                GameLog.Log($"[Checkpoint] Amir arrived! ({playersAtGate}/2 players)");
             }
         }
         
         // Check if both players are at checkpoint
         if (player1AtGate && player2AtGate)
         {
-            Debug.Log("<color=green>[Checkpoint] ✅ BOTH PLAYERS ARRIVED - LEVEL COMPLETE!</color>");
+            GameLog.Log("<color=green>[Checkpoint] ✅ BOTH PLAYERS ARRIVED - LEVEL COMPLETE!</color>");
             OnBothPlayersArrived();
         }
         else
@@ -154,7 +154,7 @@ public class Level3ExitGate : MonoBehaviourPun
             {
                 player1AtGate = false;
                 playersAtGate--;
-                Debug.Log($"[Checkpoint] Hazim left! ({playersAtGate}/2 players)");
+                GameLog.Log($"[Checkpoint] Hazim left! ({playersAtGate}/2 players)");
             }
         }
         else if (character == "Amir")
@@ -163,7 +163,7 @@ public class Level3ExitGate : MonoBehaviourPun
             {
                 player2AtGate = false;
                 playersAtGate--;
-                Debug.Log($"[Checkpoint] Amir left! ({playersAtGate}/2 players)");
+                GameLog.Log($"[Checkpoint] Amir left! ({playersAtGate}/2 players)");
             }
         }
         
@@ -198,7 +198,7 @@ public class Level3ExitGate : MonoBehaviourPun
         // Brief delay for dramatic effect
         yield return new WaitForSeconds(1f);
         
-        Debug.Log("<color=cyan>[Checkpoint] Triggering victory cutscene!</color>");
+        GameLog.Log("<color=cyan>[Checkpoint] Triggering victory cutscene!</color>");
         
         // Find and trigger the victory cutscene manager
         Level3VictoryCutsceneManager victoryManager = FindObjectOfType<Level3VictoryCutsceneManager>();

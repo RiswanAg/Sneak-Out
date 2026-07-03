@@ -21,11 +21,11 @@ public class PunCameraBinder : MonoBehaviourPun
         // ✅ CRITICAL: Only bind camera for LOCAL player
         if (!photonView.IsMine)
         {
-            Debug.Log($"[CameraBinder] {gameObject.name} is REMOTE player, skipping camera bind");
+            GameLog.Log($"[CameraBinder] {gameObject.name} is REMOTE player, skipping camera bind");
             return;
         }
         
-        Debug.Log($"[CameraBinder] {gameObject.name} is LOCAL player, binding camera...");
+        GameLog.Log($"[CameraBinder] {gameObject.name} is LOCAL player, binding camera...");
         StartCoroutine(BindCameraDelayed());
     }
     
@@ -53,7 +53,7 @@ public class PunCameraBinder : MonoBehaviourPun
                 if (setTargetMethod != null)
                 {
                     setTargetMethod.Invoke(cam, new object[] { transform });
-                    Debug.Log($"[CameraBinder] ✅ Bound ThirdPersonCamera via SetTarget to {gameObject.name}");
+                    GameLog.Log($"[CameraBinder] ✅ Bound ThirdPersonCamera via SetTarget to {gameObject.name}");
                     SetupController(cam.transform);
                     return;
                 }
@@ -63,7 +63,7 @@ public class PunCameraBinder : MonoBehaviourPun
                 if (targetField != null)
                 {
                     targetField.SetValue(cam, transform);
-                    Debug.Log($"[CameraBinder] ✅ Bound ThirdPersonCamera via target field to {gameObject.name}");
+                    GameLog.Log($"[CameraBinder] ✅ Bound ThirdPersonCamera via target field to {gameObject.name}");
                     SetupController(cam.transform);
                     return;
                 }
@@ -77,7 +77,7 @@ public class PunCameraBinder : MonoBehaviourPun
         {
             cinemachine.Follow = transform;
             cinemachine.LookAt = transform;
-            Debug.Log($"[CameraBinder] ✅ Bound Cinemachine to {gameObject.name}");
+            GameLog.Log($"[CameraBinder] ✅ Bound Cinemachine to {gameObject.name}");
             return;
         }
         #endif
@@ -93,7 +93,7 @@ public class PunCameraBinder : MonoBehaviourPun
                 if (field != null && field.FieldType == typeof(Transform))
                 {
                     field.SetValue(script, transform);
-                    Debug.Log($"[CameraBinder] ✅ Bound camera via {script.GetType().Name}.target to {gameObject.name}");
+                    GameLog.Log($"[CameraBinder] ✅ Bound camera via {script.GetType().Name}.target to {gameObject.name}");
                     SetupController(mainCam.transform);
                     return;
                 }
@@ -119,7 +119,7 @@ public class PunCameraBinder : MonoBehaviourPun
             if (cameraField != null && cameraField.FieldType == typeof(Transform))
             {
                 cameraField.SetValue(ctrl, cameraTransform);
-                Debug.Log($"[CameraBinder] Set cameraTransform on {typeName}");
+                GameLog.Log($"[CameraBinder] Set cameraTransform on {typeName}");
                 return;
             }
         }

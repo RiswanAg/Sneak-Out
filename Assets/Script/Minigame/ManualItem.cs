@@ -56,7 +56,7 @@ public class ManualItem : Item
         // Reset state on scene load
         ResetState();
         
-        Debug.Log("<color=cyan>[ManualItem] Initialized and ready for pickup</color>");
+        GameLog.Log("<color=cyan>[ManualItem] Initialized and ready for pickup</color>");
     }
     
     /// <summary>
@@ -64,7 +64,7 @@ public class ManualItem : Item
     /// </summary>
     public override void Use()
     {
-        Debug.Log($"<color=cyan>[ManualItem] Use() called - Opening manual UI</color>");
+        GameLog.Log($"<color=cyan>[ManualItem] Use() called - Opening manual UI</color>");
         OpenManualUI();
     }
     
@@ -93,7 +93,7 @@ public class ManualItem : Item
     /// </summary>
     public void OnPickedUp(int actorNumber)
     {
-        Debug.Log($"<color=lime>[ManualItem] OnPickedUp called by actor {actorNumber}</color>");
+        GameLog.Log($"<color=lime>[ManualItem] OnPickedUp called by actor {actorNumber}</color>");
         
         // Hide the model
         if (modelToHide != null)
@@ -132,7 +132,7 @@ public class ManualItem : Item
     {
         manualCollected = true;
         ManualHolderActorNumber = collectorActorNumber;
-        Debug.Log($"<color=lime>[ManualItem] SetCollected - Holder: {collectorActorNumber}</color>");
+        GameLog.Log($"<color=lime>[ManualItem] SetCollected - Holder: {collectorActorNumber}</color>");
     }
     
     /// <summary>

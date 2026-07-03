@@ -82,25 +82,25 @@ public class PanelInteractionTrigger : MonoBehaviour
         // Double-check: Manual must be collected by someone
         if (requireManualCollected && !ManualItem.IsManualCollected())
         {
-            Debug.Log("Cannot start - manual not collected by anyone!");
+            GameLog.Log("Cannot start - manual not collected by anyone!");
             return;
         }
         
         // ✅ Double-check: This player must NOT have manual
         if (ManualItem.LocalPlayerHasManual())
         {
-            Debug.Log("Cannot start - you have the manual! Let your teammate operate.");
+            GameLog.Log("Cannot start - you have the manual! Let your teammate operate.");
             return;
         }
         
         if (panelManager.IsPuzzleActive())
         {
-            Debug.Log("Panel already in use!");
+            GameLog.Log("Panel already in use!");
             return;
         }
         
         // Start puzzle with this player as operator
-        Debug.Log("<color=green>[Panel] Starting puzzle - you are the OPERATOR!</color>");
+        GameLog.Log("<color=green>[Panel] Starting puzzle - you are the OPERATOR!</color>");
         int actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
         panelManager.StartPuzzle(actorNumber);
         
@@ -130,7 +130,7 @@ public class PanelInteractionTrigger : MonoBehaviour
             if (interactPrompt != null)
                 interactPrompt.SetActive(true);
                 
-            Debug.Log("[Panel] Player entered trigger range");
+            GameLog.Log("[Panel] Player entered trigger range");
         }
     }
     
@@ -148,7 +148,7 @@ public class PanelInteractionTrigger : MonoBehaviour
             if (interactPrompt != null)
                 interactPrompt.SetActive(false);
                 
-            Debug.Log("[Panel] Player left trigger range");
+            GameLog.Log("[Panel] Player left trigger range");
         }
     }
 }

@@ -58,7 +58,7 @@ public class Level3VictoryUI : MonoBehaviourPunCallbacks
     /// </summary>
     public void ShowVictoryScreen()
     {
-        Debug.Log("<color=green>[VictoryUI] Showing victory screen!</color>");
+        GameLog.Log("<color=green>[VictoryUI] Showing victory screen!</color>");
         
         // Show panel
         if (victoryPanel != null)
@@ -109,11 +109,11 @@ public class Level3VictoryUI : MonoBehaviourPunCallbacks
     {
         if (!PhotonNetwork.IsMasterClient)
         {
-            Debug.Log("[VictoryUI] Only Master Client can restart!");
+            GameLog.Log("[VictoryUI] Only Master Client can restart!");
             return;
         }
         
-        Debug.Log("<color=yellow>[VictoryUI] Restarting Level 3...</color>");
+        GameLog.Log("<color=yellow>[VictoryUI] Restarting Level 3...</color>");
         
         // Stop music
         if (audioSource != null)
@@ -130,11 +130,11 @@ public class Level3VictoryUI : MonoBehaviourPunCallbacks
     {
         if (!PhotonNetwork.IsMasterClient)
         {
-            Debug.Log("[VictoryUI] Only Master Client can return to menu!");
+            GameLog.Log("[VictoryUI] Only Master Client can return to menu!");
             return;
         }
         
-        Debug.Log("<color=yellow>[VictoryUI] Returning to menu...</color>");
+        GameLog.Log("<color=yellow>[VictoryUI] Returning to menu...</color>");
 
         // Stop music
         if (audioSource != null)

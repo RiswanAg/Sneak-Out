@@ -160,7 +160,7 @@ namespace StarterAssets
                 if (pv != null && pv.IsMine)
                 {
                     playerController = controller;
-                    Debug.Log($"[StaminaUI] ✅ Found local player: {controller.gameObject.name}");
+                    GameLog.Log($"[StaminaUI] ✅ Found local player: {controller.gameObject.name}");
                     Initialize();
                     return;
                 }
@@ -169,7 +169,7 @@ namespace StarterAssets
                 if (pv == null && !PhotonNetwork.IsConnected)
                 {
                     playerController = controller;
-                    Debug.Log($"[StaminaUI] ✅ Found player (offline mode): {controller.gameObject.name}");
+                    GameLog.Log($"[StaminaUI] ✅ Found player (offline mode): {controller.gameObject.name}");
                     Initialize();
                     return;
                 }
@@ -197,7 +197,7 @@ namespace StarterAssets
             }
             
             isInitialized = true;
-            Debug.Log("[StaminaUI] ✅ Initialized successfully");
+            GameLog.Log("[StaminaUI] ✅ Initialized successfully");
         }
 
         // Optional: Call this to force show the stamina bar

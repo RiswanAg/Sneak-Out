@@ -118,7 +118,7 @@ public class Level3VictoryCutsceneManager : MonoBehaviourPun
     {
         isCutscenePlaying = true;
 
-        Debug.Log("<color=cyan>[Victory] Playing victory cutscene...</color>");
+        GameLog.Log("<color=cyan>[Victory] Playing victory cutscene...</color>");
 
         // Freeze players
         FreezeLocalPlayer(true);
@@ -137,7 +137,7 @@ public class Level3VictoryCutsceneManager : MonoBehaviourPun
             yield return null;
         }
 
-        Debug.Log("<color=green>[Victory] Cutscene prepared, playing now!</color>");
+        GameLog.Log("<color=green>[Victory] Cutscene prepared, playing now!</color>");
 
         // Play video (synchronized for all players)
         videoPlayer.Play();
@@ -147,7 +147,7 @@ public class Level3VictoryCutsceneManager : MonoBehaviourPun
 
     void OnVideoEnd(VideoPlayer vp)
     {
-        Debug.Log("<color=yellow>[Victory] Cutscene ended</color>");
+        GameLog.Log("<color=yellow>[Victory] Cutscene ended</color>");
 
         isCutscenePlaying = false;
 
@@ -161,7 +161,7 @@ public class Level3VictoryCutsceneManager : MonoBehaviourPun
 
     void OnVictoryCutsceneEnd()
     {
-        Debug.Log("<color=green>[Victory] Victory cutscene complete - Showing victory UI!</color>");
+        GameLog.Log("<color=green>[Victory] Victory cutscene complete - Showing victory UI!</color>");
 
         // Keep players frozen (they won, game over)
         FreezeLocalPlayer(true);
@@ -200,7 +200,7 @@ public class Level3VictoryCutsceneManager : MonoBehaviourPun
         if (customTpc != null)
             customTpc.enabled = !freeze;
 
-        Debug.Log($"[Victory] Local player {(freeze ? "FROZEN" : "UNFROZEN")}");
+        GameLog.Log($"[Victory] Local player {(freeze ? "FROZEN" : "UNFROZEN")}");
     }
 
     public bool IsCutscenePlaying()

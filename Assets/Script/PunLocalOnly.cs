@@ -14,7 +14,7 @@ public class PunDisableCameraRootOnRemote : MonoBehaviourPun
     {
         if (showDebugLogs)
         {
-            Debug.Log($"[CameraSetup] {gameObject.name} - IsMine: {photonView.IsMine}");
+            GameLog.Log($"[CameraSetup] {gameObject.name} - IsMine: {photonView.IsMine}");
         }
         
         // If this is MY player
@@ -24,7 +24,7 @@ public class PunDisableCameraRootOnRemote : MonoBehaviourPun
             if (playerCameraRoot != null)
             {
                 playerCameraRoot.SetActive(true);
-                Debug.Log($"<color=green>✅ Camera ENABLED for LOCAL player: {gameObject.name}</color>");
+                GameLog.Log($"<color=green>✅ Camera ENABLED for LOCAL player: {gameObject.name}</color>");
             }
             else
             {
@@ -37,7 +37,7 @@ public class PunDisableCameraRootOnRemote : MonoBehaviourPun
             if (playerCameraRoot != null)
             {
                 playerCameraRoot.SetActive(false);
-                Debug.Log($"<color=yellow>Camera DISABLED for REMOTE player: {gameObject.name}</color>");
+                GameLog.Log($"<color=yellow>Camera DISABLED for REMOTE player: {gameObject.name}</color>");
             }
         }
     }

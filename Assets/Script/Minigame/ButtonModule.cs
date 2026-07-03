@@ -82,13 +82,13 @@ public class ButtonModule : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         if (stripCanvasGroup == null)
         {
             stripCanvasGroup = colorStrip.gameObject.AddComponent<CanvasGroup>();
-            Debug.Log("<color=cyan>[ButtonModule] Added CanvasGroup to ColorStrip</color>");
+            GameLog.Log("<color=cyan>[ButtonModule] Added CanvasGroup to ColorStrip</color>");
         }
         
         // ✅ Hide using CanvasGroup (GameObject stays active!)
         HideColorStrip();
         
-        Debug.Log($"<color=cyan>[ButtonModule] ColorStrip setup complete and hidden</color>");
+        GameLog.Log($"<color=cyan>[ButtonModule] ColorStrip setup complete and hidden</color>");
     }
     
     void HideColorStrip()
@@ -128,9 +128,9 @@ public class ButtonModule : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         // Force canvas update
         Canvas.ForceUpdateCanvases();
         
-        Debug.Log($"<color=lime>[ButtonModule] ★ STRIP SHOWN! Color: {currentStripColor}</color>");
-        Debug.Log($"<color=lime>[ButtonModule] Strip alpha: {stripCanvasGroup.alpha}</color>");
-        Debug.Log($"<color=lime>[ButtonModule] Strip color: {colorStrip.color}</color>");
+        GameLog.Log($"<color=lime>[ButtonModule] ★ STRIP SHOWN! Color: {currentStripColor}</color>");
+        GameLog.Log($"<color=lime>[ButtonModule] Strip alpha: {stripCanvasGroup.alpha}</color>");
+        GameLog.Log($"<color=lime>[ButtonModule] Strip color: {colorStrip.color}</color>");
         
         if (audioSource != null && holdStartSound != null)
             audioSource.PlayOneShot(holdStartSound);
@@ -165,10 +165,10 @@ public class ButtonModule : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         
         SetupButtonUI();
         
-        Debug.Log($"<color=cyan>=== BUTTON MODULE ===</color>");
-        Debug.Log($"<color=cyan>Button: {currentButtonColor}, Label: {currentLabel}</color>");
-        Debug.Log($"<color=cyan>Strip: {currentStripColor}</color>");
-        Debug.Log($"<color=lime>Should Hold: {shouldHold}, Release on: {releaseOnDigit}</color>");
+        GameLog.Log($"<color=cyan>=== BUTTON MODULE ===</color>");
+        GameLog.Log($"<color=cyan>Button: {currentButtonColor}, Label: {currentLabel}</color>");
+        GameLog.Log($"<color=cyan>Strip: {currentStripColor}</color>");
+        GameLog.Log($"<color=lime>Should Hold: {shouldHold}, Release on: {releaseOnDigit}</color>");
     }
     
     void SetupButtonUI()
@@ -189,7 +189,7 @@ public class ButtonModule : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             colorStrip.color = GetUnityStripColor(currentStripColor);
             HideColorStrip();
             
-            Debug.Log($"<color=yellow>[ButtonModule] Strip color set to: {currentStripColor} ({colorStrip.color})</color>");
+            GameLog.Log($"<color=yellow>[ButtonModule] Strip color set to: {currentStripColor} ({colorStrip.color})</color>");
         }
         
         if (instructionText != null)
@@ -224,7 +224,7 @@ public class ButtonModule : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     {
         if (!isActive || isComplete) return;
         
-        Debug.Log("<color=yellow>[ButtonModule] Button DOWN</color>");
+        GameLog.Log("<color=yellow>[ButtonModule] Button DOWN</color>");
         
         isHolding = true;
         holdStartTime = Time.time;
@@ -241,7 +241,7 @@ public class ButtonModule : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         float holdDuration = Time.time - holdStartTime;
         bool wasHold = holdDuration >= holdThreshold;
         
-        Debug.Log($"<color=yellow>[ButtonModule] Button UP - Duration: {holdDuration:F2}s</color>");
+        GameLog.Log($"<color=yellow>[ButtonModule] Button UP - Duration: {holdDuration:F2}s</color>");
         
         isHolding = false;
         
@@ -272,7 +272,7 @@ public class ButtonModule : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             // Auto-release after max time
             if (holdDuration >= maxHoldTime)
             {
-                Debug.Log("<color=red>[ButtonModule] Held too long!</color>");
+                GameLog.Log("<color=red>[ButtonModule] Held too long!</color>");
                 isHolding = false;
                 
                 HideColorStrip();
@@ -292,22 +292,22 @@ public class ButtonModule : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             if (playerHeld)
                 correct = CheckReleaseTime();
             else
-                Debug.Log("<color=red>Should HOLD but TAPPED!</color>");
+                GameLog.Log("<color=red>Should HOLD but TAPPED!</color>");
         }
         else
         {
             if (!playerHeld)
             {
                 correct = true;
-                Debug.Log("<color=lime>Correct TAP!</color>");
+                GameLog.Log("<color=lime>Correct TAP!</color>");
             }
             else
-                Debug.Log("<color=red>Should TAP but HELD!</color>");
+                GameLog.Log("<color=red>Should TAP but HELD!</color>");
         }
         
         if (correct)
         {
-            Debug.Log("<color=lime>✓ BUTTON MODULE CORRECT!</color>");
+            GameLog.Log("<color=lime>✓ BUTTON MODULE CORRECT!</color>");
             isComplete = true;
             
             if (ControlPanelManager.Instance != null)
@@ -315,7 +315,7 @@ public class ButtonModule : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         }
         else
         {
-            Debug.Log("<color=red>✗ BUTTON MODULE WRONG!</color>");
+            GameLog.Log("<color=red>✗ BUTTON MODULE WRONG!</color>");
             
             if (audioSource != null && wrongSound != null)
                 audioSource.PlayOneShot(wrongSound);
@@ -338,7 +338,7 @@ public class ButtonModule : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         
         bool hasDigit = timeStr.Contains(releaseOnDigit.ToString());
         
-        Debug.Log($"<color=cyan>Timer: {seconds}, Need: {releaseOnDigit}, Found: {hasDigit}</color>");
+        GameLog.Log($"<color=cyan>Timer: {seconds}, Need: {releaseOnDigit}, Found: {hasDigit}</color>");
         
         return hasDigit;
     }

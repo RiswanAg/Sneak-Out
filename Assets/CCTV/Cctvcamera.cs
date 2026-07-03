@@ -65,7 +65,7 @@ public class CCTVCamera : MonoBehaviour
         // Store initial rotation for auto-rotate
         initialYRotation = transform.localEulerAngles.y;
         
-        Debug.Log($"CCTV Camera '{gameObject.name}' ready!");
+        GameLog.Log($"CCTV Camera '{gameObject.name}' ready!");
     }
     
     void Update()

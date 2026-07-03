@@ -47,7 +47,7 @@ public class ConsumableItem : Item
     /// </summary>
     public override void Use()
     {
-        Debug.Log($"[Consumable] Using {itemName}");
+        GameLog.Log($"[Consumable] Using {itemName}");
         
         // Find local player and apply effect
         GameObject localPlayer = FindLocalPlayer();
@@ -68,7 +68,7 @@ public class ConsumableItem : Item
     {
         if (isConsumed) return;
         
-        Debug.Log($"[Consumable] {itemName} consumed on pickup!");
+        GameLog.Log($"[Consumable] {itemName} consumed on pickup!");
         
         ApplyEffect(player);
         
@@ -118,7 +118,7 @@ public class ConsumableItem : Item
         if (controller != null)
         {
             controller.ActivateStaminaBoost(effectDuration);
-            Debug.Log($"[Consumable] Stamina boost activated for {effectDuration} seconds!");
+            GameLog.Log($"[Consumable] Stamina boost activated for {effectDuration} seconds!");
         }
         else
         {
@@ -132,14 +132,14 @@ public class ConsumableItem : Item
         if (controller != null)
         {
             controller.CurrentStamina = controller.MaxStamina;
-            Debug.Log("[Consumable] Stamina refilled!");
+            GameLog.Log("[Consumable] Stamina refilled!");
         }
     }
     
     void ApplySpeedBoost(GameObject player)
     {
         // Implement speed boost if needed
-        Debug.Log($"[Consumable] Speed boost for {effectDuration} seconds!");
+        GameLog.Log($"[Consumable] Speed boost for {effectDuration} seconds!");
         // You can add SpeedBoost system similar to StaminaBoost
     }
     
@@ -185,7 +185,7 @@ public class ConsumableItem : Item
         if (isConsumed) return;
         isConsumed = true;
         
-        Debug.Log($"[Consumable] RPC_ConsumeItem - {itemName} disappearing for all players");
+        GameLog.Log($"[Consumable] RPC_ConsumeItem - {itemName} disappearing for all players");
         
         // Play effects
         PlayConsumeEffects();

@@ -68,13 +68,13 @@ public class MidLevelCutsceneManager : MonoBehaviourPun
         // ✅ DEBUG: Check Game Over screen setup
         if (gameOverScreen != null)
         {
-            Debug.Log($"<color=cyan>[CutsceneManager] Game Over screen assigned: {gameOverScreen.name}</color>");
-            Debug.Log($"   - Initial active state: {gameOverScreen.activeSelf}");
+            GameLog.Log($"<color=cyan>[CutsceneManager] Game Over screen assigned: {gameOverScreen.name}</color>");
+            GameLog.Log($"   - Initial active state: {gameOverScreen.activeSelf}");
             
             Canvas canvas = gameOverScreen.GetComponentInParent<Canvas>();
             if (canvas != null)
             {
-                Debug.Log($"   - Canvas found: {canvas.name}, Sort Order: {canvas.sortingOrder}");
+                GameLog.Log($"   - Canvas found: {canvas.name}, Sort Order: {canvas.sortingOrder}");
             }
             else
             {
@@ -158,7 +158,7 @@ public class MidLevelCutsceneManager : MonoBehaviourPun
             return;
         }
 
-        Debug.Log("<color=yellow>[CutsceneManager] PlayCaughtCutscene() called!</color>");
+        GameLog.Log("<color=yellow>[CutsceneManager] PlayCaughtCutscene() called!</color>");
 
         if (caughtCutscene == null)
         {
@@ -203,7 +203,7 @@ public class MidLevelCutsceneManager : MonoBehaviourPun
         videoPlayer.clip = clipToPlay;
         videoPlayer.Prepare();
 
-        Debug.Log($"<color=cyan>[Cutscene] Preparing {currentCutsceneType} cutscene...</color>");
+        GameLog.Log($"<color=cyan>[Cutscene] Preparing {currentCutsceneType} cutscene...</color>");
 
         // Wait for video to be prepared
         while (!videoPlayer.isPrepared)
@@ -211,7 +211,7 @@ public class MidLevelCutsceneManager : MonoBehaviourPun
             yield return null;
         }
 
-        Debug.Log($"<color=green>[Cutscene] Playing {currentCutsceneType} cutscene!</color>");
+        GameLog.Log($"<color=green>[Cutscene] Playing {currentCutsceneType} cutscene!</color>");
 
         // Play video
         videoPlayer.Play();
@@ -219,7 +219,7 @@ public class MidLevelCutsceneManager : MonoBehaviourPun
 
     void OnVideoEnd(VideoPlayer vp)
     {
-        Debug.Log($"<color=yellow>[Cutscene] {currentCutsceneType} cutscene ended</color>");
+        GameLog.Log($"<color=yellow>[Cutscene] {currentCutsceneType} cutscene ended</color>");
 
         isCutscenePlaying = false;
 
@@ -242,7 +242,7 @@ public class MidLevelCutsceneManager : MonoBehaviourPun
 
     void OnSuccessCutsceneEnd()
     {
-        Debug.Log("<color=green>[Cutscene] Success cutscene complete - Activating guard patrol!</color>");
+        GameLog.Log("<color=green>[Cutscene] Success cutscene complete - Activating guard patrol!</color>");
 
         // Unfreeze players
         FreezeLocalPlayer(false);
@@ -264,7 +264,7 @@ public class MidLevelCutsceneManager : MonoBehaviourPun
 
     void OnCaughtCutsceneEnd()
     {
-        Debug.Log("<color=red>[Cutscene] Caught cutscene complete - Showing Game Over!</color>");
+        GameLog.Log("<color=red>[Cutscene] Caught cutscene complete - Showing Game Over!</color>");
 
         // Keep players frozen
         FreezeLocalPlayer(true);
@@ -272,13 +272,13 @@ public class MidLevelCutsceneManager : MonoBehaviourPun
         // ✅ ENHANCED: Show game over screen with better debugging
         if (gameOverScreen != null)
         {
-            Debug.Log($"<color=yellow>[Cutscene] Activating Game Over screen: {gameOverScreen.name}</color>");
-            Debug.Log($"   - Before activation: {gameOverScreen.activeSelf}");
+            GameLog.Log($"<color=yellow>[Cutscene] Activating Game Over screen: {gameOverScreen.name}</color>");
+            GameLog.Log($"   - Before activation: {gameOverScreen.activeSelf}");
             
             gameOverScreen.SetActive(true);
             
-            Debug.Log($"   - After activation: {gameOverScreen.activeSelf}");
-            Debug.Log($"   - Active in hierarchy: {gameOverScreen.activeInHierarchy}");
+            GameLog.Log($"   - After activation: {gameOverScreen.activeSelf}");
+            GameLog.Log($"   - Active in hierarchy: {gameOverScreen.activeInHierarchy}");
             
             // ✅ Force canvas update
             Canvas canvas = gameOverScreen.GetComponentInParent<Canvas>();
@@ -286,14 +286,14 @@ public class MidLevelCutsceneManager : MonoBehaviourPun
             {
                 canvas.enabled = false;
                 canvas.enabled = true;
-                Debug.Log($"   - Canvas refreshed: {canvas.name}");
+                GameLog.Log($"   - Canvas refreshed: {canvas.name}");
             }
             
             // ✅ Check CanvasGroup blocking
             CanvasGroup cg = gameOverScreen.GetComponent<CanvasGroup>();
             if (cg != null)
             {
-                Debug.Log($"   - CanvasGroup alpha: {cg.alpha}");
+                GameLog.Log($"   - CanvasGroup alpha: {cg.alpha}");
                 if (cg.alpha < 1f)
                 {
                     Debug.LogWarning("   - ⚠️ CanvasGroup alpha was low, setting to 1");
@@ -310,7 +310,7 @@ public class MidLevelCutsceneManager : MonoBehaviourPun
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         
-        Debug.Log("[Cutscene] Cursor unlocked for restart button");
+        GameLog.Log("[Cutscene] Cursor unlocked for restart button");
     }
 
     // ==================== PLAYER CONTROL ====================
@@ -338,7 +338,7 @@ public class MidLevelCutsceneManager : MonoBehaviourPun
             Cursor.lockState = CursorLockMode.Locked;
         }
 
-        Debug.Log($"[Cutscene] Local player {(freeze ? "FROZEN" : "UNFROZEN")}");
+        GameLog.Log($"[Cutscene] Local player {(freeze ? "FROZEN" : "UNFROZEN")}");
     }
 
     // ==================== RESTART LEVEL ====================
@@ -347,11 +347,11 @@ public class MidLevelCutsceneManager : MonoBehaviourPun
     {
         if (!PhotonNetwork.IsMasterClient)
         {
-            Debug.Log("Only Master Client can restart level!");
+            GameLog.Log("Only Master Client can restart level!");
             return;
         }
 
-        Debug.Log("<color=yellow>[Game] Restarting Level 3...</color>");
+        GameLog.Log("<color=yellow>[Game] Restarting Level 3...</color>");
         PhotonNetwork.LoadLevel(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 

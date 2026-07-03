@@ -12,7 +12,7 @@ public class PunDisableAudioListenerOnRemote : MonoBehaviourPun
             if (listener != null)
             {
                 listener.enabled = false;
-                Debug.Log($"[Audio] Disabled Audio Listener on remote player: {gameObject.name}");
+                GameLog.Log($"[Audio] Disabled Audio Listener on remote player: {gameObject.name}");
             }
         }
     }

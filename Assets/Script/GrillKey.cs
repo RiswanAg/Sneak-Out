@@ -37,11 +37,11 @@ public class GrillKey : Item
             #endif
         }
         
-        Debug.Log($"Key initialized: '{itemName}' | Icon: {(icon != null ? "✅" : "❌")} | Prefab: {(itemPrefab != null ? "✅" : "❌")}");
+        GameLog.Log($"Key initialized: '{itemName}' | Icon: {(icon != null ? "✅" : "❌")} | Prefab: {(itemPrefab != null ? "✅" : "❌")}");
     }
     
     public override void Use()
     {
-        Debug.Log($"Find the grill door that requires '{itemName}' to unlock it!");
+        GameLog.Log($"Find the grill door that requires '{itemName}' to unlock it!");
     }
 }

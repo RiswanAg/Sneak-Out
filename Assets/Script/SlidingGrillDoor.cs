@@ -87,7 +87,7 @@ public class SlidingGrillDoor : MonoBehaviourPun
         
         if (showDebugLogs)
         {
-            Debug.Log($"SlidingGrillDoor: Closed pos = {closedPosition}, Open pos = {openPosition}");
+            GameLog.Log($"SlidingGrillDoor: Closed pos = {closedPosition}, Open pos = {openPosition}");
         }
         
         // Setup UI
@@ -109,7 +109,7 @@ public class SlidingGrillDoor : MonoBehaviourPun
         // Check for interaction
         if (playerIsNear && Input.GetKeyDown(interactKey))
         {
-            if (showDebugLogs) Debug.Log("Player pressed E near grill door");
+            if (showDebugLogs) GameLog.Log("Player pressed E near grill door");
             TryInteract();
         }
         
@@ -138,15 +138,15 @@ public class SlidingGrillDoor : MonoBehaviourPun
         
         if (showDebugLogs)
         {
-            Debug.Log($"Found inventory on: {inventory.gameObject.name}");
-            Debug.Log($"Checking for item: '{requiredKeyName}'");
-            Debug.Log($"HasItem result: {inventory.HasItem(requiredKeyName)}");
+            GameLog.Log($"Found inventory on: {inventory.gameObject.name}");
+            GameLog.Log($"Checking for item: '{requiredKeyName}'");
+            GameLog.Log($"HasItem result: {inventory.HasItem(requiredKeyName)}");
         }
         
         // Check if player has the key
         if (inventory.HasItem(requiredKeyName))
         {
-            if (showDebugLogs) Debug.Log($"✅ Player has {requiredKeyName}! Opening door...");
+            if (showDebugLogs) GameLog.Log($"✅ Player has {requiredKeyName}! Opening door...");
             
             isUnlocked = true;
             
@@ -167,11 +167,11 @@ public class SlidingGrillDoor : MonoBehaviourPun
             
             // ✅ ALWAYS consume the key after unlocking
             inventory.RemoveItemByName(requiredKeyName);
-            if (showDebugLogs) Debug.Log($"🔑 Key '{requiredKeyName}' consumed. Door permanently unlocked!");
+            if (showDebugLogs) GameLog.Log($"🔑 Key '{requiredKeyName}' consumed. Door permanently unlocked!");
         }
         else
         {
-            if (showDebugLogs) Debug.Log($"❌ Need {requiredKeyName} to open!");
+            if (showDebugLogs) GameLog.Log($"❌ Need {requiredKeyName} to open!");
             
             if (audioSource != null && lockedSound != null)
             {
@@ -198,7 +198,7 @@ public class SlidingGrillDoor : MonoBehaviourPun
             audioSource.PlayOneShot(openSound);
         }
         
-        if (showDebugLogs) Debug.Log($"Door: {(isOpen ? "OPEN" : "CLOSED")}");
+        if (showDebugLogs) GameLog.Log($"Door: {(isOpen ? "OPEN" : "CLOSED")}");
     }
     
     InventorySystem FindPlayerInventory()
@@ -234,14 +234,14 @@ public class SlidingGrillDoor : MonoBehaviourPun
     {
         isOpen = true;
         isUnlocked = true;
-        if (showDebugLogs) Debug.Log("RPC: Door opened");
+        if (showDebugLogs) GameLog.Log("RPC: Door opened");
     }
     
     [PunRPC]
     void RPC_ToggleDoor()
     {
         isOpen = !isOpen;
-        if (showDebugLogs) Debug.Log($"RPC: Door {(isOpen ? "OPEN" : "CLOSED")}");
+        if (showDebugLogs) GameLog.Log($"RPC: Door {(isOpen ? "OPEN" : "CLOSED")}");
     }
     
     void ShowLockedMessage()
@@ -268,7 +268,7 @@ public class SlidingGrillDoor : MonoBehaviourPun
             if (pv == null || pv.IsMine)
             {
                 playerIsNear = true;
-                if (showDebugLogs) Debug.Log($"✅ Player near door. Press {interactKey} to interact.");
+                if (showDebugLogs) GameLog.Log($"✅ Player near door. Press {interactKey} to interact.");
             }
         }
     }

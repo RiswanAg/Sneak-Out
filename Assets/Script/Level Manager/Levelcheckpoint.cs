@@ -73,7 +73,7 @@ public class LevelCheckpoint : MonoBehaviourPunCallbacks
         }
         
         if (showDebugLogs)
-            Debug.Log($"[Checkpoint] Initialized. Waiting for {requiredPlayers} players. Next level: {nextLevelScene}");
+            GameLog.Log($"[Checkpoint] Initialized. Waiting for {requiredPlayers} players. Next level: {nextLevelScene}");
     }
     
     void Update()
@@ -154,7 +154,7 @@ public class LevelCheckpoint : MonoBehaviourPunCallbacks
                     PhotonNetwork.LocalPlayer.SetCustomProperties(props);
                     
                     if (showDebugLogs)
-                        Debug.Log($"[Checkpoint] Local player ENTERED checkpoint");
+                        GameLog.Log($"[Checkpoint] Local player ENTERED checkpoint");
                     
                     // Play sound
                     if (audioSource != null && playerEnteredSound != null)
@@ -191,7 +191,7 @@ public class LevelCheckpoint : MonoBehaviourPunCallbacks
                     PhotonNetwork.LocalPlayer.SetCustomProperties(props);
                     
                     if (showDebugLogs)
-                        Debug.Log($"[Checkpoint] Local player LEFT checkpoint");
+                        GameLog.Log($"[Checkpoint] Local player LEFT checkpoint");
                     
                     // Hide visual
                     if (checkpointActiveVisual != null)
@@ -207,7 +207,7 @@ public class LevelCheckpoint : MonoBehaviourPunCallbacks
         if (changedProps.ContainsKey(CHECKPOINT_KEY))
         {
             if (showDebugLogs)
-                Debug.Log($"[Checkpoint] Player {targetPlayer.NickName} checkpoint status changed");
+                GameLog.Log($"[Checkpoint] Player {targetPlayer.NickName} checkpoint status changed");
             
             CheckAllPlayersReady();
         }
@@ -220,12 +220,12 @@ public class LevelCheckpoint : MonoBehaviourPunCallbacks
         UpdatePlayerCount();
         
         if (showDebugLogs)
-            Debug.Log($"[Checkpoint] Players in checkpoint: {playersInCheckpoint}/{requiredPlayers}");
+            GameLog.Log($"[Checkpoint] Players in checkpoint: {playersInCheckpoint}/{requiredPlayers}");
         
         if (playersInCheckpoint >= requiredPlayers)
         {
             if (showDebugLogs)
-                Debug.Log("[Checkpoint] ✅ ALL PLAYERS READY! Starting transition...");
+                GameLog.Log("[Checkpoint] ✅ ALL PLAYERS READY! Starting transition...");
             
             // Play ready sound
             if (audioSource != null && allReadySound != null)
@@ -247,7 +247,7 @@ public class LevelCheckpoint : MonoBehaviourPunCallbacks
         photonView.RPC("RPC_StartTransition", RpcTarget.All);
         
         if (showDebugLogs)
-            Debug.Log($"[Checkpoint] Transitioning in {transitionDelay} seconds...");
+            GameLog.Log($"[Checkpoint] Transitioning in {transitionDelay} seconds...");
         
         // Wait for delay
         yield return new WaitForSeconds(transitionDelay);
@@ -267,7 +267,7 @@ public class LevelCheckpoint : MonoBehaviourPunCallbacks
         
         // Load next level (PhotonNetwork.LoadLevel syncs for all players)
         if (showDebugLogs)
-            Debug.Log($"[Checkpoint] Loading {nextLevelScene}...");
+            GameLog.Log($"[Checkpoint] Loading {nextLevelScene}...");
         
         PhotonNetwork.LoadLevel(nextLevelScene);
     }
@@ -278,7 +278,7 @@ public class LevelCheckpoint : MonoBehaviourPunCallbacks
         isTransitioning = true;
         
         if (showDebugLogs)
-            Debug.Log("[Checkpoint] RPC - Transition starting!");
+            GameLog.Log("[Checkpoint] RPC - Transition starting!");
         
         // Update UI
         if (statusText != null)
@@ -293,7 +293,7 @@ public class LevelCheckpoint : MonoBehaviourPunCallbacks
     void RPC_ClearInventory()
     {
         if (showDebugLogs)
-            Debug.Log("[Checkpoint] RPC - Clearing inventory...");
+            GameLog.Log("[Checkpoint] RPC - Clearing inventory...");
         
         // Find local player's inventory and clear it
         InventorySystem[] inventories = FindObjectsByType<InventorySystem>(FindObjectsSortMode.None);
@@ -306,7 +306,7 @@ public class LevelCheckpoint : MonoBehaviourPunCallbacks
             if (pv != null && pv.IsMine)
             {
                 inventory.ClearInventory();
-                Debug.Log("[Checkpoint] ✅ Local player inventory cleared!");
+                GameLog.Log("[Checkpoint] ✅ Local player inventory cleared!");
                 break;
             }
         }
@@ -316,7 +316,7 @@ public class LevelCheckpoint : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         if (showDebugLogs)
-            Debug.Log($"[Checkpoint] Player {otherPlayer.NickName} left the room");
+            GameLog.Log($"[Checkpoint] Player {otherPlayer.NickName} left the room");
         
         // Recount players
         UpdatePlayerCount();

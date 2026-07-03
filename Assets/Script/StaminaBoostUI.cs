@@ -80,7 +80,7 @@ namespace StarterAssets
             if (audioSource != null && boostStartSound != null)
                 audioSource.PlayOneShot(boostStartSound);
             
-            Debug.Log($"[StaminaBoostUI] Showing boost for {duration} seconds");
+            GameLog.Log($"[StaminaBoostUI] Showing boost for {duration} seconds");
         }
         
         /// <summary>
@@ -97,7 +97,7 @@ namespace StarterAssets
             if (audioSource != null && boostEndSound != null)
                 audioSource.PlayOneShot(boostEndSound);
             
-            Debug.Log("[StaminaBoostUI] Boost ended");
+            GameLog.Log("[StaminaBoostUI] Boost ended");
         }
         
         void Update()

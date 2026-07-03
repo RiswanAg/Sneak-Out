@@ -107,7 +107,7 @@ public class ManualUI_Image : MonoBehaviour
         if (manualPanel != null)
             manualPanel.SetActive(isManualOpen);
         
-        Debug.Log($"[Manual] Manual {(isManualOpen ? "OPENED" : "CLOSED")}");
+        GameLog.Log($"[Manual] Manual {(isManualOpen ? "OPENED" : "CLOSED")}");
     }
     
     public void OpenManual()
@@ -119,7 +119,7 @@ public class ManualUI_Image : MonoBehaviour
         if (manualPanel != null)
             manualPanel.SetActive(true);
         
-        Debug.Log("[Manual] Manual opened");
+        GameLog.Log("[Manual] Manual opened");
     }
     
     public void CloseManual()
@@ -129,7 +129,7 @@ public class ManualUI_Image : MonoBehaviour
         if (manualPanel != null)
             manualPanel.SetActive(false);
         
-        Debug.Log("[Manual] Manual closed");
+        GameLog.Log("[Manual] Manual closed");
     }
     
     // ==================== PAGE NAVIGATION ====================
@@ -148,7 +148,7 @@ public class ManualUI_Image : MonoBehaviour
         if (manualPageDisplay != null && manualPages[currentPage] != null)
         {
             manualPageDisplay.sprite = manualPages[currentPage];
-            Debug.Log($"[Manual] Showing page {currentPage + 1}: {GetPageName(currentPage)}");
+            GameLog.Log($"[Manual] Showing page {currentPage + 1}: {GetPageName(currentPage)}");
         }
         else
         {
@@ -217,7 +217,7 @@ public class ManualUI_Image : MonoBehaviour
     public void SetCanToggle(bool canToggle)
     {
         this.canToggle = canToggle;
-        Debug.Log($"[Manual] Can toggle: {canToggle}");
+        GameLog.Log($"[Manual] Can toggle: {canToggle}");
         
         // Auto-close if disabled
         if (!canToggle && isManualOpen)

@@ -12,7 +12,7 @@ public class PlayerRoomTracker : MonoBehaviour
         {
             CurrentRoomID = room.roomID;
             CurrentFloorLevel = room.floorLevel;
-            Debug.Log($"Player entered Room {CurrentRoomID}, Floor {CurrentFloorLevel}");
+            GameLog.Log($"Player entered Room {CurrentRoomID}, Floor {CurrentFloorLevel}");
         }
     }
 
@@ -23,7 +23,7 @@ public class PlayerRoomTracker : MonoBehaviour
         {
             CurrentRoomID = 0;
             CurrentFloorLevel = 0;
-            Debug.Log("Player exited the room");
+            GameLog.Log("Player exited the room");
         }
     }
     

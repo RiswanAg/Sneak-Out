@@ -134,7 +134,7 @@ public class CikguNPC : MonoBehaviourPunCallbacks, ISoundListener, IPunObservabl
         targetPlayer = null;
         canSeePlayer = false;
         
-        Debug.Log("[CikguNPC] Awake - State reset");
+        GameLog.Log("[CikguNPC] Awake - State reset");
     }
 
     void OnEnable()
@@ -144,7 +144,7 @@ public class CikguNPC : MonoBehaviourPunCallbacks, ISoundListener, IPunObservabl
         hasPlayedSpottedSound = false;
         hasPlayedCaughtSound = false;
         
-        Debug.Log("[CikguNPC] OnEnable - Flags reset");
+        GameLog.Log("[CikguNPC] OnEnable - Flags reset");
     }
     void Start()
     {
@@ -206,7 +206,7 @@ public class CikguNPC : MonoBehaviourPunCallbacks, ISoundListener, IPunObservabl
         hasPlayedSpottedSound = false;
         hasPlayedCaughtSound = false;
         
-        Debug.Log($"[CikguNPC] Initialized - Vision: {hasVision}, Room: {myRoomID}, Floor: {myFloorLevel}, IsMaster: {PhotonNetwork.IsMasterClient}");
+        GameLog.Log($"[CikguNPC] Initialized - Vision: {hasVision}, Room: {myRoomID}, Floor: {myFloorLevel}, IsMaster: {PhotonNetwork.IsMasterClient}");
     }
 
     void OnDestroy()
@@ -490,7 +490,7 @@ public class CikguNPC : MonoBehaviourPunCallbacks, ISoundListener, IPunObservabl
     {
         if (currentState == newState) return;
 
-        Debug.Log($"[CikguNPC] State: {currentState} → {newState}");
+        GameLog.Log($"[CikguNPC] State: {currentState} → {newState}");
 
         currentState = newState;
         stateTimer = 0f;
@@ -538,7 +538,7 @@ public class CikguNPC : MonoBehaviourPunCallbacks, ISoundListener, IPunObservabl
 
         hasTriggeredGameOver = true;
 
-        Debug.Log($"[CikguNPC] CAUGHT PLAYER: {targetPlayer.name}");
+        GameLog.Log($"[CikguNPC] CAUGHT PLAYER: {targetPlayer.name}");
 
         ChangeState(CikguState.Yelling);
 
@@ -560,7 +560,7 @@ public class CikguNPC : MonoBehaviourPunCallbacks, ISoundListener, IPunObservabl
         if (caughtView != null)
         {
             GameObject caughtPlayer = caughtView.gameObject;
-            Debug.Log($"[RPC_TriggerGameOver] Player caught: {caughtPlayer.name}");
+            GameLog.Log($"[RPC_TriggerGameOver] Player caught: {caughtPlayer.name}");
 
             OnPlayerCaught?.Invoke(caughtPlayer);
         }
@@ -590,7 +590,7 @@ public class CikguNPC : MonoBehaviourPunCallbacks, ISoundListener, IPunObservabl
         
         GameObject player = playerPV.gameObject;
         
-        Debug.Log($"[CikguNPC] RPC_PlayerSpotted - Chasing {player.name}!");
+        GameLog.Log($"[CikguNPC] RPC_PlayerSpotted - Chasing {player.name}!");
         
         // Set target
         targetPlayer = player;
@@ -638,7 +638,7 @@ public class CikguNPC : MonoBehaviourPunCallbacks, ISoundListener, IPunObservabl
         if (audioSource != null && spottedPlayerClip != null)
         {
             audioSource.PlayOneShot(spottedPlayerClip);
-            Debug.Log("[CikguNPC] Playing spotted sound: Berhenti jangan bergerak!");
+            GameLog.Log("[CikguNPC] Playing spotted sound: Berhenti jangan bergerak!");
         }
     }
 
@@ -647,7 +647,7 @@ public class CikguNPC : MonoBehaviourPunCallbacks, ISoundListener, IPunObservabl
         if (audioSource != null && caughtPlayerClip != null)
         {
             audioSource.PlayOneShot(caughtPlayerClip);
-            Debug.Log("[CikguNPC] Playing caught sound: Apa korang buat ni ha!");
+            GameLog.Log("[CikguNPC] Playing caught sound: Apa korang buat ni ha!");
         }
     }
 
@@ -661,14 +661,14 @@ public class CikguNPC : MonoBehaviourPunCallbacks, ISoundListener, IPunObservabl
         // ✅ FILTER 1: Check if allowed sound type
         if (!IsAllowedSound(soundType))
         {
-            Debug.Log($"[CikguNPC] Ignoring sound type: {soundType}");
+            GameLog.Log($"[CikguNPC] Ignoring sound type: {soundType}");
             return;
         }
 
         // ✅ FILTER 2: Check if washing machine only mode
         if (washingMachineOnly && !IsWashingMachineSource(source))
         {
-            Debug.Log($"[CikguNPC] Washing machine only mode - ignoring non-washing machine sound");
+            GameLog.Log($"[CikguNPC] Washing machine only mode - ignoring non-washing machine sound");
             return;
         }
 
@@ -676,18 +676,18 @@ public class CikguNPC : MonoBehaviourPunCallbacks, ISoundListener, IPunObservabl
         if (soundRoom == 0) return;
         if (myFloorLevel != soundFloor)
         {
-            Debug.Log($"[CikguNPC] Different floor - ignoring");
+            GameLog.Log($"[CikguNPC] Different floor - ignoring");
             return;
         }
         if (myRoomID != 0 && myRoomID != soundRoom)
         {
-            Debug.Log($"[CikguNPC] Different room - ignoring");
+            GameLog.Log($"[CikguNPC] Different room - ignoring");
             return;
         }
 
         if (currentState == CikguState.Yelling) return;
 
-        Debug.Log($"[CikguNPC] Reacting to sound: {soundType} from {source?.name} at Room {soundRoom}");
+        GameLog.Log($"[CikguNPC] Reacting to sound: {soundType} from {source?.name} at Room {soundRoom}");
 
         if (currentState == CikguState.Chasing)
         {
@@ -773,7 +773,7 @@ public class CikguNPC : MonoBehaviourPunCallbacks, ISoundListener, IPunObservabl
     public void OnSoundHeard(Vector3 soundPosition, SoundType soundType, float distance, GameObject source)
     {
         // ✅ This is called by player footsteps - we IGNORE these
-        Debug.Log($"[CikguNPC] OnSoundHeard (footsteps) - IGNORED");
+        GameLog.Log($"[CikguNPC] OnSoundHeard (footsteps) - IGNORED");
         return;
     }
 
@@ -824,29 +824,29 @@ public class CikguNPC : MonoBehaviourPunCallbacks, ISoundListener, IPunObservabl
         {
             case CikguState.Sitting:
                 animator.SetBool(ANIM_SITTING, true);
-                Debug.Log("[CikguNPC] Animation: Sitting");
+                GameLog.Log("[CikguNPC] Animation: Sitting");
                 break;
 
             case CikguState.WalkingToSound:
             case CikguState.ReturningToSeat:
             case CikguState.Patrolling:
                 animator.SetBool(ANIM_WALKING, true);
-                Debug.Log("[CikguNPC] Animation: Walking");
+                GameLog.Log("[CikguNPC] Animation: Walking");
                 break;
 
             case CikguState.LookingAround:
                 animator.SetBool(ANIM_LOOKING, true);
-                Debug.Log("[CikguNPC] Animation: Looking Around");
+                GameLog.Log("[CikguNPC] Animation: Looking Around");
                 break;
 
             case CikguState.Chasing:
                 animator.SetBool(ANIM_RUNNING, true);
-                Debug.Log("[CikguNPC] Animation: Running");
+                GameLog.Log("[CikguNPC] Animation: Running");
                 break;
 
             case CikguState.Yelling:
                 animator.SetBool(ANIM_YELLING, true);
-                Debug.Log("[CikguNPC] Animation: Yelling");
+                GameLog.Log("[CikguNPC] Animation: Yelling");
                 break;
         }
     }

@@ -28,7 +28,7 @@ public class PanelUIInputHandler : MonoBehaviour
         // ESC to cancel puzzle
         if (Input.GetKeyDown(cancelKey))
         {
-            Debug.Log("ESC pressed - canceling puzzle");
+            GameLog.Log("ESC pressed - canceling puzzle");
             panelManager.CancelPuzzle();
         }
     }

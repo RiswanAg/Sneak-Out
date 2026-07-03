@@ -146,15 +146,15 @@ public class KeypadModule : MonoBehaviour
         GeneratePuzzle();
         SetupUI();
         
-        Debug.Log($"<color=cyan>=== SYMBOL MODULE (MODUL 2: SIMBOL) ===</color>");
+        GameLog.Log($"<color=cyan>=== SYMBOL MODULE (MODUL 2: SIMBOL) ===</color>");
         string symbolsStr = "";
         for (int i = 0; i < 4; i++)
         {
             symbolsStr += SYMBOL_CHARS[displayedSymbols[i]] + " ";
         }
-        Debug.Log($"<color=cyan>4 Symbols displayed: {symbolsStr}</color>");
-        Debug.Log($"<color=cyan>Found in LAJUR (Column): {correctColumn + 1}</color>");
-        Debug.Log($"<color=lime>Press order (ATAS ke BAWAH): Button {correctOrder[0]+1} → {correctOrder[1]+1} → {correctOrder[2]+1} → {correctOrder[3]+1}</color>");
+        GameLog.Log($"<color=cyan>4 Symbols displayed: {symbolsStr}</color>");
+        GameLog.Log($"<color=cyan>Found in LAJUR (Column): {correctColumn + 1}</color>");
+        GameLog.Log($"<color=lime>Press order (ATAS ke BAWAH): Button {correctOrder[0]+1} → {correctOrder[1]+1} → {correctOrder[2]+1} → {correctOrder[3]+1}</color>");
     }
     
     void GeneratePuzzle()
@@ -294,7 +294,7 @@ public class KeypadModule : MonoBehaviour
     {
         if (!isActive || isComplete || buttonPressed[buttonIndex]) return;
         
-        Debug.Log($"<color=yellow>Button {buttonIndex + 1} pressed (Symbol: {SYMBOL_CHARS[displayedSymbols[buttonIndex]]})</color>");
+        GameLog.Log($"<color=yellow>Button {buttonIndex + 1} pressed (Symbol: {SYMBOL_CHARS[displayedSymbols[buttonIndex]]})</color>");
         
         if (audioSource != null && pressSound != null)
             audioSource.PlayOneShot(pressSound);
@@ -303,7 +303,7 @@ public class KeypadModule : MonoBehaviour
         if (buttonIndex == correctOrder[currentPressIndex])
         {
             // CORRECT!
-            Debug.Log($"<color=lime>✓ Correct! ({currentPressIndex + 1}/4)</color>");
+            GameLog.Log($"<color=lime>✓ Correct! ({currentPressIndex + 1}/4)</color>");
             
             buttonPressed[buttonIndex] = true;
             
@@ -320,7 +320,7 @@ public class KeypadModule : MonoBehaviour
             // Check if complete
             if (currentPressIndex >= 4)
             {
-                Debug.Log("<color=lime>★★★ SYMBOL MODULE COMPLETE! ★★★</color>");
+                GameLog.Log("<color=lime>★★★ SYMBOL MODULE COMPLETE! ★★★</color>");
                 isComplete = true;
                 
                 if (audioSource != null && correctSound != null)
@@ -339,7 +339,7 @@ public class KeypadModule : MonoBehaviour
         else
         {
             // WRONG!
-            Debug.Log($"<color=red>✗ Wrong! Expected button {correctOrder[currentPressIndex] + 1}</color>");
+            GameLog.Log($"<color=red>✗ Wrong! Expected button {correctOrder[currentPressIndex] + 1}</color>");
             
             if (audioSource != null && wrongSound != null)
                 audioSource.PlayOneShot(wrongSound);
@@ -396,7 +396,7 @@ public class KeypadModule : MonoBehaviour
         if (instructionText != null)
             instructionText.text = "Cuba lagi! Tekan mengikut urutan.";
         
-        Debug.Log("<color=orange>Module RESET - Try again!</color>");
+        GameLog.Log("<color=orange>Module RESET - Try again!</color>");
     }
     
     // Public getters for debugging

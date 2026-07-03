@@ -95,7 +95,7 @@ public class NPCDoor : MonoBehaviour
         UpdateNavMesh();
         PlaySound();
         
-        Debug.Log($"Door {gameObject.name}: {(isOpen ? "OPENED" : "CLOSED")}");
+        GameLog.Log($"Door {gameObject.name}: {(isOpen ? "OPENED" : "CLOSED")}");
     }
     
     /// <summary>
@@ -108,7 +108,7 @@ public class NPCDoor : MonoBehaviour
             isOpen = true;
             UpdateNavMesh();
             PlaySound();
-            Debug.Log($"Door {gameObject.name}: OPENED by NPC");
+            GameLog.Log($"Door {gameObject.name}: OPENED by NPC");
         }
     }
     
@@ -122,7 +122,7 @@ public class NPCDoor : MonoBehaviour
             isOpen = false;
             UpdateNavMesh();
             PlaySound();
-            Debug.Log($"Door {gameObject.name}: CLOSED");
+            GameLog.Log($"Door {gameObject.name}: CLOSED");
         }
     }
     

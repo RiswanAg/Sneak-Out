@@ -190,7 +190,7 @@ public class StudentNPC : MonoBehaviour, ISoundListener
             playerLayer = LayerMask.GetMask("Player");
         }
         
-        Debug.Log($"{gameObject.name} initialized in Room {myRoomID}, state: {currentState}, hasVision: {hasVision}");
+        GameLog.Log($"{gameObject.name} initialized in Room {myRoomID}, state: {currentState}, hasVision: {hasVision}");
     }
     
     void DetectMyRoom()
@@ -202,7 +202,7 @@ public class StudentNPC : MonoBehaviour, ISoundListener
             if (room != null)
             {
                 myRoomID = room.roomID;
-                Debug.Log($"{gameObject.name} auto-detected Room {myRoomID}");
+                GameLog.Log($"{gameObject.name} auto-detected Room {myRoomID}");
             }
         }
     }
@@ -273,12 +273,12 @@ public class StudentNPC : MonoBehaviour, ISoundListener
                 if (Physics.Raycast(npcEyePosition, directionToPlayer, out hit, distanceToPlayer, obstacleLayer))
                 {
                     // Something is blocking view
-                    Debug.Log($"{gameObject.name} - Vision blocked by {hit.collider.name}");
+                    GameLog.Log($"{gameObject.name} - Vision blocked by {hit.collider.name}");
                     continue;
                 }
                 
                 // ✅ PLAYER SPOTTED - INSTANT GAME OVER!
-                Debug.Log($"[StudentNPC] {gameObject.name} SPOTTED PLAYER: {playerCollider.name}! GAME OVER!");
+                GameLog.Log($"[StudentNPC] {gameObject.name} SPOTTED PLAYER: {playerCollider.name}! GAME OVER!");
                 PlayerSpotted(playerCollider.gameObject);
                 return;
             }
@@ -293,7 +293,7 @@ public class StudentNPC : MonoBehaviour, ISoundListener
         if (hasTriggeredGameOver) return;
         hasTriggeredGameOver = true;
         
-        Debug.Log($"[StudentNPC] {gameObject.name} caught {player.name} by sight!");
+        GameLog.Log($"[StudentNPC] {gameObject.name} caught {player.name} by sight!");
         
         // ✅ STOP ALL INVESTIGATION IMMEDIATELY
         if (isInvestigating)
@@ -371,16 +371,16 @@ public class StudentNPC : MonoBehaviour, ISoundListener
         // Don't process sounds if already caught someone
         if (hasTriggeredGameOver) return;
         
-        Debug.Log($"{gameObject.name} (Room {myRoomID}) heard sound from Room {soundRoomID}, Distance: {distance}m, Type: {soundType}");
+        GameLog.Log($"{gameObject.name} (Room {myRoomID}) heard sound from Room {soundRoomID}, Distance: {distance}m, Type: {soundType}");
         
         // ROOM CHECK: Only hear sounds from same room
         if (myRoomID != soundRoomID && myRoomID != 0)
         {
-            Debug.Log($"{gameObject.name} (Room {myRoomID}) IGNORING sound from Room {soundRoomID} - different room!");
+            GameLog.Log($"{gameObject.name} (Room {myRoomID}) IGNORING sound from Room {soundRoomID} - different room!");
             return;
         }
         
-        Debug.Log($"{gameObject.name} is in same room! Proceeding with sound detection...");
+        GameLog.Log($"{gameObject.name} is in same room! Proceeding with sound detection...");
         
         // SLEEPING STUDENT
         if (currentState == StudentState.Sleeping)
@@ -390,17 +390,17 @@ public class StudentNPC : MonoBehaviour, ISoundListener
                 if (gameOverOnWake)
                 {
                     // ✅ TRIGGER GAME OVER - Sleeping student woke up!
-                    Debug.Log($"[StudentNPC] {gameObject.name} - GAME OVER! Sleeping student woke up!");
+                    GameLog.Log($"[StudentNPC] {gameObject.name} - GAME OVER! Sleeping student woke up!");
                     StartCoroutine(WakeUpAndTriggerGameOver(source));
                 }
                 else if (onlyWakeUp)
                 {
-                    Debug.Log($"{gameObject.name} - Sleeping student waking up (no investigation)");
+                    GameLog.Log($"{gameObject.name} - Sleeping student waking up (no investigation)");
                     StartCoroutine(WakeUpAndSleep());
                 }
                 else
                 {
-                    Debug.Log($"{gameObject.name} - Sleeping student waking up and investigating");
+                    GameLog.Log($"{gameObject.name} - Sleeping student waking up and investigating");
                     currentState = StudentState.Idle;
                     if (animator != null)
                         animator.SetTrigger(animWakeUp);
@@ -409,7 +409,7 @@ public class StudentNPC : MonoBehaviour, ISoundListener
             }
             else
             {
-                Debug.Log($"{gameObject.name} - Sound not loud enough to wake sleeping student");
+                GameLog.Log($"{gameObject.name} - Sound not loud enough to wake sleeping student");
             }
             return;
         }
@@ -417,19 +417,19 @@ public class StudentNPC : MonoBehaviour, ISoundListener
         // AWAKE STUDENT - Ignore if already investigating
         if (isInvestigating)
         {
-            Debug.Log($"{gameObject.name} is already investigating, ignoring new sound");
+            GameLog.Log($"{gameObject.name} is already investigating, ignoring new sound");
             return;
         }
         
         // Only investigate if not too quiet and far
         if (soundType == SoundType.VeryQuiet && distance > 3f)
         {
-            Debug.Log($"{gameObject.name} - Sound too quiet and far, ignoring");
+            GameLog.Log($"{gameObject.name} - Sound too quiet and far, ignoring");
             return;
         }
         
         // Start investigation!
-        Debug.Log($"{gameObject.name} - Starting investigation!");
+        GameLog.Log($"{gameObject.name} - Starting investigation!");
         StartInvestigation(soundPosition);
     }
     
@@ -443,7 +443,7 @@ public class StudentNPC : MonoBehaviour, ISoundListener
         soundLocation = soundPos;
         stateBeforeInvestigation = currentState;
         
-        Debug.Log($"{gameObject.name} heard sound at {soundPos}, starting investigation from {stateBeforeInvestigation}");
+        GameLog.Log($"{gameObject.name} heard sound at {soundPos}, starting investigation from {stateBeforeInvestigation}");
         
         // Show alert
         if (alertIndicator != null)
@@ -459,7 +459,7 @@ public class StudentNPC : MonoBehaviour, ISoundListener
     private IEnumerator InvestigationSequence()
     {
         // STEP 1: Look around while in place
-        Debug.Log($"{gameObject.name} - Step 1: Looking around");
+        GameLog.Log($"{gameObject.name} - Step 1: Looking around");
         currentState = StudentState.AlertLooking;
         UpdateAnimator();
         yield return new WaitForSeconds(alertLookTime);
@@ -467,14 +467,14 @@ public class StudentNPC : MonoBehaviour, ISoundListener
         // STEP 2: Stand up if sitting
         if (stateBeforeInvestigation == StudentState.Sitting)
         {
-            Debug.Log($"{gameObject.name} - Step 2: Standing up from sitting");
+            GameLog.Log($"{gameObject.name} - Step 2: Standing up from sitting");
             currentState = StudentState.Idle;
             UpdateAnimator();
             yield return new WaitForSeconds(0.5f);
         }
         
         // STEP 3: Walk to sound location
-        Debug.Log($"{gameObject.name} - Step 3: Walking to sound");
+        GameLog.Log($"{gameObject.name} - Step 3: Walking to sound");
         currentState = StudentState.WalkingToSound;
         UpdateAnimator();
         
@@ -511,7 +511,7 @@ public class StudentNPC : MonoBehaviour, ISoundListener
         }
         
         // STEP 4: Investigate at location
-        Debug.Log($"{gameObject.name} - Step 4: Investigating at location");
+        GameLog.Log($"{gameObject.name} - Step 4: Investigating at location");
         currentState = StudentState.InvestigatingSound;
         UpdateAnimator();
         
@@ -519,7 +519,7 @@ public class StudentNPC : MonoBehaviour, ISoundListener
         yield return new WaitForSeconds(investigationTime);
         
         // STEP 5: Walk back home
-        Debug.Log($"{gameObject.name} - Step 5: Returning home");
+        GameLog.Log($"{gameObject.name} - Step 5: Returning home");
         currentState = StudentState.ReturningHome;
         UpdateAnimator();
         
@@ -546,7 +546,7 @@ public class StudentNPC : MonoBehaviour, ISoundListener
         transform.rotation = homeRotation;
         
         // STEP 6: Look around at home position
-        Debug.Log($"{gameObject.name} - Step 6: Looking around after returning");
+        GameLog.Log($"{gameObject.name} - Step 6: Looking around after returning");
         currentState = StudentState.ReturnedLooking;
         UpdateAnimator();
         
@@ -554,7 +554,7 @@ public class StudentNPC : MonoBehaviour, ISoundListener
         yield return new WaitForSeconds(returnedLookTime);
         
         // STEP 7: Return to original state
-        Debug.Log($"{gameObject.name} - Step 7: Returning to original state: {stateBeforeInvestigation}");
+        GameLog.Log($"{gameObject.name} - Step 7: Returning to original state: {stateBeforeInvestigation}");
         currentState = stateBeforeInvestigation;
         UpdateAnimator();
         
@@ -564,7 +564,7 @@ public class StudentNPC : MonoBehaviour, ISoundListener
         
         // Investigation complete
         isInvestigating = false;
-        Debug.Log($"{gameObject.name} investigation complete!");
+        GameLog.Log($"{gameObject.name} investigation complete!");
     }
     
     private void CancelInvestigation()
@@ -576,7 +576,7 @@ public class StudentNPC : MonoBehaviour, ISoundListener
             alertIndicator.SetActive(false);
         
         isInvestigating = false;
-        Debug.Log($"{gameObject.name} investigation CANCELED");
+        GameLog.Log($"{gameObject.name} investigation CANCELED");
     }
     
     // ==================== SLEEPING STUDENT GAME OVER ====================
@@ -588,7 +588,7 @@ public class StudentNPC : MonoBehaviour, ISoundListener
     {
         if (hasTriggeredGameOver) yield break;
         
-        Debug.Log($"[StudentNPC] {gameObject.name} waking up - GAME OVER!");
+        GameLog.Log($"[StudentNPC] {gameObject.name} waking up - GAME OVER!");
         
         // Trigger wake animation
         if (animator != null)
@@ -637,7 +637,7 @@ public class StudentNPC : MonoBehaviour, ISoundListener
     /// </summary>
     private IEnumerator WakeUpAndSleep()
     {
-        Debug.Log($"{gameObject.name} waking up briefly");
+        GameLog.Log($"{gameObject.name} waking up briefly");
         
         // Trigger wake animation
         if (animator != null)
@@ -660,7 +660,7 @@ public class StudentNPC : MonoBehaviour, ISoundListener
         if (alertIndicator != null)
             alertIndicator.SetActive(false);
         
-        Debug.Log($"{gameObject.name} went back to sleep");
+        GameLog.Log($"{gameObject.name} went back to sleep");
     }
     
     GameObject FindNearestPlayer()
@@ -769,7 +769,7 @@ public class StudentNPC : MonoBehaviour, ISoundListener
     public static void ResetStaticFlags()
     {
         hasTriggeredGameOver = false;
-        Debug.Log("[StudentNPC] Static flags reset");
+        GameLog.Log("[StudentNPC] Static flags reset");
     }
     
     // ==================== DEBUG ====================

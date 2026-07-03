@@ -16,14 +16,14 @@ public class PunPlayerInput : MonoBehaviourPun
         else
         {
             if (showDebugLogs)
-                Debug.Log($"<color=green>✅ Local player spawned: {gameObject.name}</color>");
+                GameLog.Log($"<color=green>✅ Local player spawned: {gameObject.name}</color>");
         }
     }
     
     void DisableRemotePlayerInput()
     {
         if (showDebugLogs)
-            Debug.Log($"<color=yellow>Disabling input for remote player: {gameObject.name}</color>");
+            GameLog.Log($"<color=yellow>Disabling input for remote player: {gameObject.name}</color>");
         
         // Disable ALL MonoBehaviour scripts that handle input
         // Get all components
@@ -51,7 +51,7 @@ public class PunPlayerInput : MonoBehaviourPun
                 component.enabled = false;
                 
                 if (showDebugLogs)
-                    Debug.Log($"  - Disabled: {typeName}");
+                    GameLog.Log($"  - Disabled: {typeName}");
             }
         }
         
@@ -64,6 +64,6 @@ public class PunPlayerInput : MonoBehaviourPun
         }
         
         if (showDebugLogs)
-            Debug.Log($"<color=yellow>✅ Remote player input disabled</color>");
+            GameLog.Log($"<color=yellow>✅ Remote player input disabled</color>");
     }
 }

@@ -63,7 +63,7 @@ public class ThrowMechanic : MonoBehaviourPun
             }
         }
 
-        Debug.Log($"ThrowMechanic: Setup complete. Can pickup thrown items: {canPickupThrownItems}");
+        GameLog.Log($"ThrowMechanic: Setup complete. Can pickup thrown items: {canPickupThrownItems}");
     }
 
     void Update()
@@ -86,7 +86,7 @@ public class ThrowMechanic : MonoBehaviourPun
 
         if (equippedItem == null)
         {
-            Debug.Log("No item equipped to throw!");
+            GameLog.Log("No item equipped to throw!");
             return;
         }
 
@@ -96,7 +96,7 @@ public class ThrowMechanic : MonoBehaviourPun
             return;
         }
 
-        Debug.Log($"🎯 Throwing: {equippedItem.itemName}");
+        GameLog.Log($"🎯 Throwing: {equippedItem.itemName}");
         
         // Calculate spawn position and rotation
         Vector3 spawnPosition = throwPoint.position + throwPoint.forward * 0.5f;
@@ -143,10 +143,10 @@ public class ThrowMechanic : MonoBehaviourPun
         if (despawnTime > 0)
         {
             Destroy(thrownObject, despawnTime);
-            Debug.Log($"Item will despawn in {despawnTime} seconds");
+            GameLog.Log($"Item will despawn in {despawnTime} seconds");
         }
 
-        Debug.Log($"✅ {equippedItem.itemName} thrown and is now pickup-able!");
+        GameLog.Log($"✅ {equippedItem.itemName} thrown and is now pickup-able!");
     }
 
     /// <summary>
@@ -221,7 +221,7 @@ public class ThrowMechanic : MonoBehaviourPun
             newItem.icon = itemData.icon;
             newItem.itemPrefab = itemData.itemPrefab;
             
-            Debug.Log($"✅ Added Item component to {obj.name} - now pickup-able!");
+            GameLog.Log($"✅ Added Item component to {obj.name} - now pickup-able!");
         }
         else
         {
@@ -229,7 +229,7 @@ public class ThrowMechanic : MonoBehaviourPun
             existingItem.icon = itemData.icon;
             existingItem.itemPrefab = itemData.itemPrefab;
             
-            Debug.Log($"✅ Updated existing Item component on {obj.name}");
+            GameLog.Log($"✅ Updated existing Item component on {obj.name}");
         }
         
         Rigidbody rb = obj.GetComponent<Rigidbody>();
@@ -291,7 +291,7 @@ public class ThrownItemSound : MonoBehaviour
                 soundType = SoundType.Quiet;
             }
 
-            Debug.Log($"🔊 Thrown item impact in Room {itemRoomID}: {soundType} (velocity: {impactVelocity:F1})");
+            GameLog.Log($"🔊 Thrown item impact in Room {itemRoomID}: {soundType} (velocity: {impactVelocity:F1})");
             
             // ✅ Notify NPCs with explicit room ID
             NotifyNPCsInRoom(soundType);
@@ -311,7 +311,7 @@ public class ThrownItemSound : MonoBehaviour
             if (room != null)
             {
                 itemRoomID = room.roomID;
-                Debug.Log($"Thrown item detected in Room {itemRoomID}");
+                GameLog.Log($"Thrown item detected in Room {itemRoomID}");
                 return;
             }
         }
@@ -324,7 +324,7 @@ public class ThrownItemSound : MonoBehaviour
             if (room != null)
             {
                 itemRoomID = room.roomID;
-                Debug.Log($"Thrown item found in Room {itemRoomID} via overlap");
+                GameLog.Log($"Thrown item found in Room {itemRoomID} via overlap");
                 return;
             }
         }
@@ -351,6 +351,6 @@ public class ThrownItemSound : MonoBehaviour
             }
         }
 
-        Debug.Log($"Notified {allStudents.Length} students about sound in Room {itemRoomID}");
+        GameLog.Log($"Notified {allStudents.Length} students about sound in Room {itemRoomID}");
     }
 }

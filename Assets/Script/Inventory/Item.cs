@@ -101,7 +101,7 @@ public class Item : MonoBehaviour
 
     public virtual void Use()
     {
-        Debug.Log("Using item: " + itemName);
+        GameLog.Log("Using item: " + itemName);
     }
 
     void OnCollisionEnter(Collision collision)
@@ -129,7 +129,7 @@ public class Item : MonoBehaviour
             }
             
             audioSource.PlayOneShot(landingSound, landingVolume);
-            Debug.Log($"🔊 Playing landing sound for {itemName}");
+            GameLog.Log($"🔊 Playing landing sound for {itemName}");
         }
     }
     
@@ -150,7 +150,7 @@ public class Item : MonoBehaviour
             soundType = SoundType.Loud;
         }
         
-        Debug.Log($"🔊 {itemName} landed and made {soundType} sound!");
+        GameLog.Log($"🔊 {itemName} landed and made {soundType} sound!");
         
         // ✅ FIXED: Use new EmitSound method
         // Room detection is now handled automatically by PlayerRoomTracker

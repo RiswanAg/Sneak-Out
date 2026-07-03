@@ -38,7 +38,7 @@ public class PlayerVisionDetector : MonoBehaviourPun
             visionBlockingLayers = LayerMask.GetMask("Default", "Wall", "Obstacle");
         }
         
-        Debug.Log($"[PlayerVisionDetector] {gameObject.name} initialized - Found {cikgus.Length} CikguNPC(s)");
+        GameLog.Log($"[PlayerVisionDetector] {gameObject.name} initialized - Found {cikgus.Length} CikguNPC(s)");
     }
     
     void Update()
@@ -123,7 +123,7 @@ public class PlayerVisionDetector : MonoBehaviourPun
     /// </summary>
     void NotifyCikguSpotted(CikguNPC cikgu)
     {
-        Debug.Log($"[PlayerVisionDetector] {gameObject.name} spotted by CikguNPC! Notifying...");
+        GameLog.Log($"[PlayerVisionDetector] {gameObject.name} spotted by CikguNPC! Notifying...");
         
         // Get CikguNPC's PhotonView
         PhotonView cikguPV = cikgu.GetComponent<PhotonView>();

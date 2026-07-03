@@ -43,7 +43,7 @@ public class Level2Checkpoint : MonoBehaviour
         // Local player entered checkpoint
         localPlayerInside = true;
         
-        Debug.Log($"[Checkpoint] Local player entered checkpoint");
+        GameLog.Log($"[Checkpoint] Local player entered checkpoint");
         
         // Notify Level2Manager
         if (Level2Manager.Instance != null)
@@ -65,7 +65,7 @@ public class Level2Checkpoint : MonoBehaviour
         // Local player exited checkpoint
         localPlayerInside = false;
         
-        Debug.Log($"[Checkpoint] Local player exited checkpoint");
+        GameLog.Log($"[Checkpoint] Local player exited checkpoint");
         
         // Notify Level2Manager
         if (Level2Manager.Instance != null)

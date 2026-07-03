@@ -105,7 +105,7 @@ public class Level2Manager : MonoBehaviourPunCallbacks
         isVictory = false;
         isRestarting = false;
         
-        Debug.Log("[Level2] Level 2 Manager initialized - Team Game Over Mode");
+        GameLog.Log("[Level2] Level 2 Manager initialized - Team Game Over Mode");
     }
     
     void OnDestroy()
@@ -152,7 +152,7 @@ public class Level2Manager : MonoBehaviourPunCallbacks
     {
         if (isGameOver || isVictory || isRestarting) return;
         
-        Debug.Log($"[Level2] Player caught by Cikgu: {caughtPlayer?.name}");
+        GameLog.Log($"[Level2] Player caught by Cikgu: {caughtPlayer?.name}");
         
         // Team game over - notify ALL players
         // Only Master sends the RPC to prevent double calls
@@ -168,7 +168,7 @@ public class Level2Manager : MonoBehaviourPunCallbacks
         if (isGameOver || isRestarting) return;
         isGameOver = true;
         
-        Debug.Log($"[Level2] TEAM GAME OVER! {caughtPlayerName} was caught!");
+        GameLog.Log($"[Level2] TEAM GAME OVER! {caughtPlayerName} was caught!");
         
         // Freeze ALL players
         FreezeAllPlayers();
@@ -201,7 +201,7 @@ public class Level2Manager : MonoBehaviourPunCallbacks
     {
         if (player == null) return;
         
-        Debug.Log($"[Level2] Freezing player: {player.name}");
+        GameLog.Log($"[Level2] Freezing player: {player.name}");
         
         // Disable CharacterController
         var controller = player.GetComponent<CharacterController>();
@@ -295,12 +295,12 @@ public class Level2Manager : MonoBehaviourPunCallbacks
         if (entered)
         {
             playersAtCheckpoint.Add(actorNumber);
-            Debug.Log($"[Level2] Player {actorNumber} at checkpoint ({playersAtCheckpoint.Count}/{requiredPlayersAtCheckpoint})");
+            GameLog.Log($"[Level2] Player {actorNumber} at checkpoint ({playersAtCheckpoint.Count}/{requiredPlayersAtCheckpoint})");
         }
         else
         {
             playersAtCheckpoint.Remove(actorNumber);
-            Debug.Log($"[Level2] Player {actorNumber} left checkpoint ({playersAtCheckpoint.Count}/{requiredPlayersAtCheckpoint})");
+            GameLog.Log($"[Level2] Player {actorNumber} left checkpoint ({playersAtCheckpoint.Count}/{requiredPlayersAtCheckpoint})");
         }
     }
     
@@ -319,7 +319,7 @@ public class Level2Manager : MonoBehaviourPunCallbacks
         if (isVictory || isGameOver) return;
         isVictory = true;
         
-        Debug.Log("[Level2] VICTORY! All players reached checkpoint!");
+        GameLog.Log("[Level2] VICTORY! All players reached checkpoint!");
         
         if (audioSource != null && victorySound != null)
             audioSource.PlayOneShot(victorySound);
@@ -359,7 +359,7 @@ public class Level2Manager : MonoBehaviourPunCallbacks
     
     void LoadNextLevel()
     {
-        Debug.Log($"[Level2] Loading next level: {nextLevelScene}");
+        GameLog.Log($"[Level2] Loading next level: {nextLevelScene}");
         PhotonNetwork.LoadLevel(nextLevelScene);
     }
     
@@ -379,7 +379,7 @@ public class Level2Manager : MonoBehaviourPunCallbacks
         if (isRestarting) return;
         isRestarting = true;
         
-        Debug.Log("[Level2] RestartLevel called!");
+        GameLog.Log("[Level2] RestartLevel called!");
         
         Time.timeScale = 1f;
         
@@ -404,7 +404,7 @@ public class Level2Manager : MonoBehaviourPunCallbacks
     [PunRPC]
     void RPC_RestartForEveryone()
     {
-        Debug.Log("[Level2] RPC_RestartForEveryone received! Reloading scene...");
+        GameLog.Log("[Level2] RPC_RestartForEveryone received! Reloading scene...");
         
         // Reset state
         Time.timeScale = 1f;
@@ -426,12 +426,12 @@ public class Level2Manager : MonoBehaviourPunCallbacks
     
     void CleanupBeforeRestart()
     {
-        Debug.Log("[Level2] Cleaning up before restart...");
+        GameLog.Log("[Level2] Cleaning up before restart...");
         
         // Just clear the TagObject reference
         if (PhotonNetwork.LocalPlayer.TagObject != null)
         {
-            Debug.Log("[Level2] Clearing TagObject reference");
+            GameLog.Log("[Level2] Clearing TagObject reference");
             PhotonNetwork.LocalPlayer.TagObject = null;
         }
         
@@ -447,7 +447,7 @@ public class Level2Manager : MonoBehaviourPunCallbacks
         yield return null;
         yield return null;
         
-        Debug.Log("[Level2] Loading scene now...");
+        GameLog.Log("[Level2] Loading scene now...");
         
         // ✅ Each player loads the scene themselves
         // This ensures both players reload properly
@@ -461,7 +461,7 @@ public class Level2Manager : MonoBehaviourPunCallbacks
         if (isGoingToMenu) return;
         isGoingToMenu = true;
         
-        Debug.Log("[Level2] Returning to menu...");
+        GameLog.Log("[Level2] Returning to menu...");
         
         Time.timeScale = 1f;
         

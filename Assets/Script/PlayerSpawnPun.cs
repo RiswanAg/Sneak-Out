@@ -22,7 +22,7 @@ public class PlayerSpawnerPun : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("=== PlayerSpawnerPun Start ===");
+        GameLog.Log("=== PlayerSpawnerPun Start ===");
         
         // ==================== VALIDATION CHECKS ====================
         
@@ -34,10 +34,10 @@ public class PlayerSpawnerPun : MonoBehaviour
             return;
         }
 
-        Debug.Log($"✅ In room: {PhotonNetwork.CurrentRoom.Name}");
-        Debug.Log($"Players in room: {PhotonNetwork.CurrentRoom.PlayerCount}");
-        Debug.Log($"My ActorNumber: {PhotonNetwork.LocalPlayer.ActorNumber}");
-        Debug.Log($"IsMasterClient: {PhotonNetwork.IsMasterClient}");
+        GameLog.Log($"✅ In room: {PhotonNetwork.CurrentRoom.Name}");
+        GameLog.Log($"Players in room: {PhotonNetwork.CurrentRoom.PlayerCount}");
+        GameLog.Log($"My ActorNumber: {PhotonNetwork.LocalPlayer.ActorNumber}");
+        GameLog.Log($"IsMasterClient: {PhotonNetwork.IsMasterClient}");
         
         // ✅ FIXED: Always destroy old player and clear TagObject on scene load
         // This ensures fresh spawn on retry/reload
@@ -54,7 +54,7 @@ public class PlayerSpawnerPun : MonoBehaviour
             return;
         }
 
-        Debug.Log("✅ Spawn points found");
+        GameLog.Log("✅ Spawn points found");
         
         // ==================== CHARACTER ASSIGNMENT ====================
         
@@ -64,14 +64,14 @@ public class PlayerSpawnerPun : MonoBehaviour
         // Save to custom properties for reference by other scripts
         PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { "character", character } });
         
-        Debug.Log($"✅ Character assigned: {character} (ActorNumber: {actorNumber})");
+        GameLog.Log($"✅ Character assigned: {character} (ActorNumber: {actorNumber})");
 
         // ==================== SPAWN PLAYER ====================
         
         Transform spawn = (character == "Hazim") ? hazimDormSpawn : amirDormSpawn;
         string prefab   = (character == "Hazim") ? hazimPrefabName : amirPrefabName;
 
-        Debug.Log($"Spawning prefab '{prefab}' at position {spawn.position}");
+        GameLog.Log($"Spawning prefab '{prefab}' at position {spawn.position}");
 
         try
         {
@@ -83,7 +83,7 @@ public class PlayerSpawnerPun : MonoBehaviour
                 // Tag this player object for reference
                 PhotonNetwork.LocalPlayer.TagObject = player;
                 
-                Debug.Log($"✅✅✅ SUCCESS! Player spawned as {character}! ✅✅✅");
+                GameLog.Log($"✅✅✅ SUCCESS! Player spawned as {character}! ✅✅✅");
             }
             else
             {
@@ -102,7 +102,7 @@ public class PlayerSpawnerPun : MonoBehaviour
     /// </summary>
     void CleanupOldPlayer()
     {
-        Debug.Log("[PlayerSpawner] Checking for old player to cleanup...");
+        GameLog.Log("[PlayerSpawner] Checking for old player to cleanup...");
         
         // Check if TagObject has an old player reference
         if (PhotonNetwork.LocalPlayer.TagObject != null)
@@ -111,7 +111,7 @@ public class PlayerSpawnerPun : MonoBehaviour
             
             if (oldPlayer != null)
             {
-                Debug.Log($"[PlayerSpawner] 🧹 Found old player: {oldPlayer.name}");
+                GameLog.Log($"[PlayerSpawner] 🧹 Found old player: {oldPlayer.name}");
                 
                 // ✅ FIXED: Use regular Destroy instead of PhotonNetwork.Destroy
                 // PhotonNetwork.Destroy causes errors during scene reload
@@ -120,7 +120,7 @@ public class PlayerSpawnerPun : MonoBehaviour
             }
             else
             {
-                Debug.Log("[PlayerSpawner] TagObject was stale (already destroyed)");
+                GameLog.Log("[PlayerSpawner] TagObject was stale (already destroyed)");
             }
             
             // Clear the reference
@@ -148,7 +148,7 @@ public class PlayerSpawnerPun : MonoBehaviour
             if (pv.gameObject.CompareTag("Player") || 
                 pv.GetComponent<CharacterController>() != null)
             {
-                Debug.Log($"[PlayerSpawner] 🧹 Found orphaned player, destroying: {pv.gameObject.name}");
+                GameLog.Log($"[PlayerSpawner] 🧹 Found orphaned player, destroying: {pv.gameObject.name}");
                 // ✅ FIXED: Use regular Destroy instead of PhotonNetwork.Destroy
                 Destroy(pv.gameObject);
             }
@@ -166,7 +166,7 @@ public class PlayerSpawnerPun : MonoBehaviour
             if (t != null)
             {
                 hazimDormSpawn = t.transform;
-                Debug.Log("Auto-found Spawn_HazimDorm");
+                GameLog.Log("Auto-found Spawn_HazimDorm");
             }
             else
             {
@@ -180,7 +180,7 @@ public class PlayerSpawnerPun : MonoBehaviour
             if (t != null)
             {
                 amirDormSpawn = t.transform;
-                Debug.Log("Auto-found Spawn_AmirDorm");
+                GameLog.Log("Auto-found Spawn_AmirDorm");
             }
             else
             {

@@ -99,7 +99,7 @@ public class InventorySystem : MonoBehaviourPun
     {
         if (inventoryItems.Count >= maxSlots)
         {
-            Debug.Log("Inventory full!");
+            GameLog.Log("Inventory full!");
             return false;
         }
 
@@ -112,7 +112,7 @@ public class InventorySystem : MonoBehaviourPun
         {
             data.isManual = true;
             data.isConsumable = false;
-            Debug.Log($"<color=cyan>[Inventory] ✓ Added MANUAL to inventory!</color>");
+            GameLog.Log($"<color=cyan>[Inventory] ✓ Added MANUAL to inventory!</color>");
         }
         else
         {
@@ -127,7 +127,7 @@ public class InventorySystem : MonoBehaviourPun
         }
         
         inventoryItems.Add(data);
-        Debug.Log($"✅ Added {data.itemName} to inventory");
+        GameLog.Log($"✅ Added {data.itemName} to inventory");
         
         // For Manual: Sync collection state BEFORE hiding
         if (isManualItem)
@@ -162,7 +162,7 @@ public class InventorySystem : MonoBehaviourPun
             if (itemPV.IsMine || PhotonNetwork.IsMasterClient)
             {
                 PhotonNetwork.Destroy(itemObject);
-                Debug.Log($"<color=green>[Inventory] PhotonNetwork.Destroy</color>");
+                GameLog.Log($"<color=green>[Inventory] PhotonNetwork.Destroy</color>");
             }
         }
         else
@@ -170,14 +170,14 @@ public class InventorySystem : MonoBehaviourPun
             // Scene object - hide via RPC using object name
             string itemName = itemObject.name;
             photonView.RPC("RPC_HideItem", RpcTarget.All, itemName);
-            Debug.Log($"<color=green>[Inventory] RPC_HideItem sent: {itemName}</color>");
+            GameLog.Log($"<color=green>[Inventory] RPC_HideItem sent: {itemName}</color>");
         }
     }
     
     [PunRPC]
     void RPC_HideItem(string itemName)
     {
-        Debug.Log($"<color=yellow>[Inventory] RPC_HideItem: {itemName}</color>");
+        GameLog.Log($"<color=yellow>[Inventory] RPC_HideItem: {itemName}</color>");
         
         // Find ALL objects with this name and hide them
         GameObject[] allObjects = FindObjectsOfType<GameObject>(true);
@@ -186,7 +186,7 @@ public class InventorySystem : MonoBehaviourPun
             if (obj.name == itemName)
             {
                 obj.SetActive(false);
-                Debug.Log($"<color=green>[Inventory] Hidden: {obj.name}</color>");
+                GameLog.Log($"<color=green>[Inventory] Hidden: {obj.name}</color>");
             }
         }
     }
@@ -196,7 +196,7 @@ public class InventorySystem : MonoBehaviourPun
     {
         if (currentSlot < 0 || currentSlot >= inventoryItems.Count)
         {
-            Debug.Log("[Inventory] No item equipped!");
+            GameLog.Log("[Inventory] No item equipped!");
             return;
         }
         
@@ -204,20 +204,20 @@ public class InventorySystem : MonoBehaviourPun
         
         if (itemData.isManual)
         {
-            Debug.Log($"<color=cyan>[Inventory] Opening Manual...</color>");
+            GameLog.Log($"<color=cyan>[Inventory] Opening Manual...</color>");
             ManualItem.OpenManualUI();
             return;
         }
         
         if (itemData.isConsumable)
         {
-            Debug.Log($"[Inventory] Consuming {itemData.itemName}...");
+            GameLog.Log($"[Inventory] Consuming {itemData.itemName}...");
             ApplyConsumableEffect(itemData);
             RemoveEquippedItem();
             return;
         }
         
-        Debug.Log($"[Inventory] Using {itemData.itemName}");
+        GameLog.Log($"[Inventory] Using {itemData.itemName}");
     }
     
     public void ConsumeEquippedItem() => UseEquippedItem();
@@ -271,7 +271,7 @@ public class InventorySystem : MonoBehaviourPun
         
         if (itemData.isManual)
         {
-            Debug.Log("[Inventory] Cannot throw the manual!");
+            GameLog.Log("[Inventory] Cannot throw the manual!");
             return;
         }
         
@@ -438,7 +438,7 @@ public class InventorySystem : MonoBehaviourPun
         UpdateUI();
         
         if (itemData.isManual)
-            Debug.Log("<color=cyan>[Inventory] Manual equipped! Press C to read or TAB anytime.</color>");
+            GameLog.Log("<color=cyan>[Inventory] Manual equipped! Press C to read or TAB anytime.</color>");
     }
 
     void UnequipCurrent()
@@ -455,7 +455,7 @@ public class InventorySystem : MonoBehaviourPun
     // ==================== MANUAL SYNC ====================
     void SyncManualCollected(int actorNumber)
     {
-        Debug.Log($"<color=yellow>[Inventory] SyncManualCollected - actor {actorNumber}</color>");
+        GameLog.Log($"<color=yellow>[Inventory] SyncManualCollected - actor {actorNumber}</color>");
         
         if (PhotonNetwork.IsConnected)
             photonView.RPC("RPC_ManualCollectedSync", RpcTarget.All, actorNumber);
@@ -466,7 +466,7 @@ public class InventorySystem : MonoBehaviourPun
     [PunRPC]
     void RPC_ManualCollectedSync(int collectorActorNumber)
     {
-        Debug.Log($"<color=green>[Inventory] RPC_ManualCollectedSync! Collector: {collectorActorNumber}</color>");
+        GameLog.Log($"<color=green>[Inventory] RPC_ManualCollectedSync! Collector: {collectorActorNumber}</color>");
         OnManualCollectedLocal(collectorActorNumber);
     }
     
@@ -474,7 +474,7 @@ public class InventorySystem : MonoBehaviourPun
     {
         ManualItem.SetCollected(collectorActorNumber);
         
-        Debug.Log($"<color=green>[Inventory] Manual synced! Holder: {collectorActorNumber}</color>");
+        GameLog.Log($"<color=green>[Inventory] Manual synced! Holder: {collectorActorNumber}</color>");
         
         if (PhotonNetwork.IsConnected)
         {
@@ -486,7 +486,7 @@ public class InventorySystem : MonoBehaviourPun
                 if (manualUI != null)
                 {
                     manualUI.OnManualCollected();
-                    Debug.Log("<color=lime>[Inventory] ManualUI enabled!</color>");
+                    GameLog.Log("<color=lime>[Inventory] ManualUI enabled!</color>");
                 }
             }
         }
@@ -501,13 +501,13 @@ public class InventorySystem : MonoBehaviourPun
     // ==================== DEBUG ====================
     public void PrintInventory()
     {
-        Debug.Log("=== INVENTORY ===");
+        GameLog.Log("=== INVENTORY ===");
         for (int i = 0; i < inventoryItems.Count; i++)
         {
             string equipped = (i == currentSlot) ? " [EQUIPPED]" : "";
             string type = inventoryItems[i].isManual ? " [MANUAL]" : 
                          (inventoryItems[i].isConsumable ? " [CONSUMABLE]" : "");
-            Debug.Log($"Slot {i + 1}: {inventoryItems[i].itemName}{type}{equipped}");
+            GameLog.Log($"Slot {i + 1}: {inventoryItems[i].itemName}{type}{equipped}");
         }
     }
 }

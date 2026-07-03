@@ -122,7 +122,7 @@ public class ControlPanelManager : MonoBehaviourPun
     {
         if (operatorActorNumber != -1)
         {
-            Debug.Log("Panel is already in use!");
+            GameLog.Log("Panel is already in use!");
             return;
         }
         
@@ -147,7 +147,7 @@ public class ControlPanelManager : MonoBehaviourPun
         
         if (isLocalPlayerOperator)
         {
-            Debug.Log("You are the OPERATOR. Solve the puzzle!");
+            GameLog.Log("You are the OPERATOR. Solve the puzzle!");
             
             if (panelUI != null)
                 panelUI.SetActive(true);
@@ -157,7 +157,7 @@ public class ControlPanelManager : MonoBehaviourPun
         }
         else
         {
-            Debug.Log("You are the COORDINATOR. Help with the manual!");
+            GameLog.Log("You are the COORDINATOR. Help with the manual!");
             
             ManualUI manualUI = FindObjectOfType<ManualUI>();
             if (manualUI != null && manualUI.HasManual())
@@ -252,7 +252,7 @@ public class ControlPanelManager : MonoBehaviourPun
             case 2: memoryComplete = true; break;
         }
         
-        Debug.Log($"Module {moduleIndex} complete!");
+        GameLog.Log($"Module {moduleIndex} complete!");
         
         if (wiresComplete && keypadComplete && memoryComplete)
         {
@@ -277,7 +277,7 @@ public class ControlPanelManager : MonoBehaviourPun
     void RPC_AddStrike(string reason)
     {
         currentStrikes++;
-        Debug.Log($"STRIKE {currentStrikes}! {reason}");
+        GameLog.Log($"STRIKE {currentStrikes}! {reason}");
         
         if (isLocalPlayerOperator)
         {
@@ -321,7 +321,7 @@ public class ControlPanelManager : MonoBehaviourPun
         isPuzzleComplete = true;
         isPuzzleActive = false;
         
-        Debug.Log("PUZZLE COMPLETE! CCTV disabled!");
+        GameLog.Log("PUZZLE COMPLETE! CCTV disabled!");
         
         if (isLocalPlayerOperator)
         {
@@ -362,7 +362,7 @@ public class ControlPanelManager : MonoBehaviourPun
         MidLevelCutsceneManager cutsceneManager = FindObjectOfType<MidLevelCutsceneManager>();
         if (cutsceneManager != null)
         {
-            Debug.Log("<color=green>[Panel] Triggering success cutscene!</color>");
+            GameLog.Log("<color=green>[Panel] Triggering success cutscene!</color>");
             cutsceneManager.PlaySuccessCutscene();
         }
         else
@@ -380,7 +380,7 @@ public class ControlPanelManager : MonoBehaviourPun
         isPuzzleComplete = true;
         isPuzzleActive = false;
         
-        Debug.Log($"PUZZLE FAILED! {reason}");
+        GameLog.Log($"PUZZLE FAILED! {reason}");
         
         if (isLocalPlayerOperator)
         {
@@ -430,7 +430,7 @@ public class ControlPanelManager : MonoBehaviourPun
         MidLevelCutsceneManager cutsceneManager = FindObjectOfType<MidLevelCutsceneManager>();
         if (cutsceneManager != null)
         {
-            Debug.Log("<color=red>[Panel] Puzzle failed - Showing Game Over screen!</color>");
+            GameLog.Log("<color=red>[Panel] Puzzle failed - Showing Game Over screen!</color>");
             
             // Directly call OnCaughtCutsceneEnd to show Game Over (reuse the same logic)
             // We'll access it through a public method
@@ -453,7 +453,7 @@ public class ControlPanelManager : MonoBehaviourPun
         
         if (gameOverScreen != null)
         {
-            Debug.Log("<color=yellow>[Panel] Activating Game Over screen directly!</color>");
+            GameLog.Log("<color=yellow>[Panel] Activating Game Over screen directly!</color>");
             gameOverScreen.SetActive(true);
             
             // Show cursor for restart button
@@ -575,6 +575,6 @@ public class ControlPanelManager : MonoBehaviourPun
         if (manualUI != null)
             manualUI.SetCanToggle(false);
         
-        Debug.Log("Puzzle cancelled.");
+        GameLog.Log("Puzzle cancelled.");
     }
 }

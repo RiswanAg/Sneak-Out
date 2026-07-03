@@ -33,7 +33,7 @@ public class InteractableFurniture : MonoBehaviourPun
         
         if (showDebugLogs)
         {
-            Debug.Log($"InteractableFurniture: {gameObject.name} initialized");
+            GameLog.Log($"InteractableFurniture: {gameObject.name} initialized");
         }
     }
 
@@ -41,7 +41,7 @@ public class InteractableFurniture : MonoBehaviourPun
     {
         if (Input.GetKeyDown(interactKey) && playerIsNear)
         {
-            if (showDebugLogs) Debug.Log($"Player pressed {interactKey} near {gameObject.name}");
+            if (showDebugLogs) GameLog.Log($"Player pressed {interactKey} near {gameObject.name}");
             
             // Check if we're connected to Photon
             if (PhotonNetwork.IsConnected && photonView != null)
@@ -70,7 +70,7 @@ public class InteractableFurniture : MonoBehaviourPun
     void ToggleDoor()
     {
         isOpen = !isOpen;
-        if (showDebugLogs) Debug.Log($"🚪 {gameObject.name} door: {(isOpen ? "OPEN" : "CLOSED")}");
+        if (showDebugLogs) GameLog.Log($"🚪 {gameObject.name} door: {(isOpen ? "OPEN" : "CLOSED")}");
     }
 
     private void OnTriggerEnter(Collider other)
@@ -84,7 +84,7 @@ public class InteractableFurniture : MonoBehaviourPun
             if (pv == null || pv.IsMine)
             {
                 playerIsNear = true;
-                if (showDebugLogs) Debug.Log($"✅ Player near {gameObject.name}. Press {interactKey} to interact.");
+                if (showDebugLogs) GameLog.Log($"✅ Player near {gameObject.name}. Press {interactKey} to interact.");
             }
         }
     }
@@ -98,7 +98,7 @@ public class InteractableFurniture : MonoBehaviourPun
             if (pv == null || pv.IsMine)
             {
                 playerIsNear = false;
-                if (showDebugLogs) Debug.Log($"Player left {gameObject.name} trigger area");
+                if (showDebugLogs) GameLog.Log($"Player left {gameObject.name} trigger area");
             }
         }
     }

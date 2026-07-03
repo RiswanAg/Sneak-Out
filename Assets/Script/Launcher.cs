@@ -42,7 +42,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     public TMP_InputField nameInput;
     private bool hasSetNick;
 
-    public string levelToPlay = "Level 1";
+    public string levelToPlay = SceneNames.IntroCutscene;
     public GameObject startGameButton;
 
     public GameObject roomTestButton;

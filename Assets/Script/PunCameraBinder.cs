@@ -7,7 +7,6 @@ using System.Collections;
 /// Attach this to your player prefab.
 /// 
 /// Works with:
-/// - SimpleThirdPersonCamera
 /// - ThirdPersonCamera (CustomCharacterController)
 /// - Cinemachine
 /// </summary>
@@ -40,17 +39,7 @@ public class PunCameraBinder : MonoBehaviourPun
     
     void BindCamera()
     {
-        // ==================== TRY 1: SimpleThirdPersonCamera ====================
-        SimpleThirdPersonCamera simpleCam = FindObjectOfType<SimpleThirdPersonCamera>();
-        if (simpleCam != null)
-        {
-            simpleCam.target = transform;
-            Debug.Log($"[CameraBinder] ✅ Bound SimpleThirdPersonCamera to {gameObject.name}");
-            SetupController(simpleCam.transform);
-            return;
-        }
-        
-        // ==================== TRY 2: Custom ThirdPersonCamera ====================
+        // ==================== TRY 1: Custom ThirdPersonCamera ====================
         // Using reflection to avoid namespace issues
         MonoBehaviour[] allCameras = FindObjectsOfType<MonoBehaviour>();
         foreach (var cam in allCameras)
@@ -81,7 +70,7 @@ public class PunCameraBinder : MonoBehaviourPun
             }
         }
         
-        // ==================== TRY 3: Cinemachine ====================
+        // ==================== TRY 2: Cinemachine ====================
         #if CINEMACHINE
         var cinemachine = FindObjectOfType<Cinemachine.CinemachineVirtualCamera>();
         if (cinemachine != null)
@@ -93,7 +82,7 @@ public class PunCameraBinder : MonoBehaviourPun
         }
         #endif
         
-        // ==================== TRY 4: Any script with "target" field ====================
+        // ==================== TRY 3: Any script with "target" field ====================
         Camera mainCam = Camera.main;
         if (mainCam != null)
         {

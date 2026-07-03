@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 /// Level3VictoryUI.cs - Victory screen after completing Level 3
 /// Shows congratulations message with Restart and Menu buttons
 /// </summary>
-public class Level3VictoryUI : MonoBehaviourPun
+public class Level3VictoryUI : MonoBehaviourPunCallbacks
 {
     [Header("UI References")]
     public GameObject victoryPanel;
@@ -135,18 +135,20 @@ public class Level3VictoryUI : MonoBehaviourPun
         }
         
         Debug.Log("<color=yellow>[VictoryUI] Returning to menu...</color>");
-        
+
         // Stop music
         if (audioSource != null)
             audioSource.Stop();
-        
-        // Disconnect from room
+
+        // Disconnect from room; scene loads once OnLeftRoom fires below
         PhotonNetwork.LeaveRoom();
-        
-        // Load menu scene (adjust scene name if needed)
-        PhotonNetwork.LoadLevel("MainMenu");
     }
-    
+
+    public override void OnLeftRoom()
+    {
+        SceneManager.LoadScene(SceneNames.MainMenu);
+    }
+
     void OnDestroy()
     {
         // Clean up button listeners

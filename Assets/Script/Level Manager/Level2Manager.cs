@@ -40,12 +40,12 @@ public class Level2Manager : MonoBehaviourPunCallbacks
     
     [Header("Cutscene & Next Level")]
     public GameObject cutsceneObject;
-    public string nextLevelScene = "Level 3";
+    public string nextLevelScene = SceneNames.Level3;
     public float transitionDelay = 3f;
     public bool isFinalLevel = false;
-    
+
     [Header("Scene Names")]
-    public string mainMenuScene = "Menu";
+    public string mainMenuScene = SceneNames.MainMenu;
     
     [Header("Audio")]
     public AudioSource audioSource;

@@ -20,7 +20,7 @@ public class LevelCheckpoint : MonoBehaviourPunCallbacks
     public float transitionDelay = 3f;
     
     [Tooltip("Next level scene name")]
-    public string nextLevelScene = "Level 2";
+    public string nextLevelScene = SceneNames.Level2;
     
     [Header("UI References")]
     [Tooltip("Panel to show checkpoint status")]

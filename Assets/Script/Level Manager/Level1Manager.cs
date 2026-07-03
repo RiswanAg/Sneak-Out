@@ -32,19 +32,19 @@ public class Level1Manager : MonoBehaviourPunCallbacks
     public GameObject inGameCutsceneObject;
     
     [Tooltip("Cutscene scene to load after victory")]
-    public string victoryCutsceneScene = "Level1VictoryCutscene";
-    
+    public string victoryCutsceneScene = SceneNames.Level1VictoryCutscene;
+
     [Tooltip("Skip cutscene and go directly to next level")]
     public bool skipCutscene = false;
-    
+
     [Tooltip("Next level scene (if skipping cutscene OR after cutscene ends)")]
-    public string nextLevelScene = "Level 2";
-    
+    public string nextLevelScene = SceneNames.Level2;
+
     [Tooltip("Delay before loading cutscene/next level")]
     public float transitionDelay = 2f;
-    
+
     [Header("Scene Names")]
-    public string mainMenuScene = "Menu";
+    public string mainMenuScene = SceneNames.MainMenu;
     
     [Header("Audio")]
     public AudioSource audioSource;

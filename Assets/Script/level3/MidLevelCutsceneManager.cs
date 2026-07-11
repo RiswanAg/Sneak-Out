@@ -71,7 +71,8 @@ public class MidLevelCutsceneManager : MonoBehaviourPun
             GameLog.Log($"<color=cyan>[CutsceneManager] Game Over screen assigned: {gameOverScreen.name}</color>");
             GameLog.Log($"   - Initial active state: {gameOverScreen.activeSelf}");
             
-            Canvas canvas = gameOverScreen.GetComponentInParent<Canvas>();
+            // includeInactive: true — the parent canvas starts disabled in the scene
+            Canvas canvas = gameOverScreen.GetComponentInParent<Canvas>(true);
             if (canvas != null)
             {
                 GameLog.Log($"   - Canvas found: {canvas.name}, Sort Order: {canvas.sortingOrder}");
@@ -168,6 +169,27 @@ public class MidLevelCutsceneManager : MonoBehaviourPun
         }
 
         photonView.RPC("RPC_PlayCutscene", RpcTarget.All, (int)CutsceneType.Caught);
+    }
+
+    /// <summary>
+    /// Show the Game Over screen on ALL clients without playing a cutscene
+    /// (used by ControlPanelManager when the puzzle fails).
+    /// </summary>
+    public void ShowGameOver()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            Debug.LogWarning("Only Master Client can trigger Game Over!");
+            return;
+        }
+
+        photonView.RPC("RPC_ShowGameOver", RpcTarget.All);
+    }
+
+    [PunRPC]
+    void RPC_ShowGameOver()
+    {
+        OnCaughtCutsceneEnd();
     }
 
     // ==================== CUTSCENE PLAYBACK ====================
@@ -274,20 +296,20 @@ public class MidLevelCutsceneManager : MonoBehaviourPun
         {
             GameLog.Log($"<color=yellow>[Cutscene] Activating Game Over screen: {gameOverScreen.name}</color>");
             GameLog.Log($"   - Before activation: {gameOverScreen.activeSelf}");
-            
+
+            // ✅ The parent canvas (GameOverCanvas) starts disabled in the scene —
+            // activate the whole parent chain or the screen stays invisible
+            Canvas canvas = gameOverScreen.GetComponentInParent<Canvas>(true);
+            if (canvas != null && !canvas.gameObject.activeSelf)
+            {
+                canvas.gameObject.SetActive(true);
+                GameLog.Log($"   - Parent canvas activated: {canvas.name}");
+            }
+
             gameOverScreen.SetActive(true);
-            
+
             GameLog.Log($"   - After activation: {gameOverScreen.activeSelf}");
             GameLog.Log($"   - Active in hierarchy: {gameOverScreen.activeInHierarchy}");
-            
-            // ✅ Force canvas update
-            Canvas canvas = gameOverScreen.GetComponentInParent<Canvas>();
-            if (canvas != null)
-            {
-                canvas.enabled = false;
-                canvas.enabled = true;
-                GameLog.Log($"   - Canvas refreshed: {canvas.name}");
-            }
             
             // ✅ Check CanvasGroup blocking
             CanvasGroup cg = gameOverScreen.GetComponent<CanvasGroup>();
@@ -307,8 +329,7 @@ public class MidLevelCutsceneManager : MonoBehaviourPun
         }
 
         // Show cursor for restart button
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
+        CursorManager.SetFree();
         
         GameLog.Log("[Cutscene] Cursor unlocked for restart button");
     }
@@ -334,8 +355,7 @@ public class MidLevelCutsceneManager : MonoBehaviourPun
 
         if (freeze)
         {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            CursorManager.SetLocked();
         }
 
         GameLog.Log($"[Cutscene] Local player {(freeze ? "FROZEN" : "UNFROZEN")}");
@@ -345,13 +365,26 @@ public class MidLevelCutsceneManager : MonoBehaviourPun
 
     void RestartLevel()
     {
-        if (!PhotonNetwork.IsMasterClient)
-        {
-            GameLog.Log("Only Master Client can restart level!");
-            return;
-        }
+        // Either player can click Restart — broadcast so every client clears its
+        // own player before the reload; only the master does the synced load.
+        GameLog.Log("<color=yellow>[Game] Restart requested...</color>");
+        photonView.RPC("RPC_RequestRestart", RpcTarget.All);
+    }
 
-        GameLog.Log("<color=yellow>[Game] Restarting Level 3...</color>");
+    [PunRPC]
+    void RPC_RequestRestart()
+    {
+        GameLog.Log("<color=yellow>[Game] Restart received...</color>");
+
+        // Clear our stale player reference. Do NOT PhotonNetwork.Destroy here - it
+        // races with the master's LoadLevel and throws "Destroy Failed. Could not
+        // find PhotonView...". The reload destroys players; they respawn on load.
+        PhotonNetwork.LocalPlayer.TagObject = null;
+
+        // EVERY client reloads itself. LoadLevel always loads locally and pauses
+        // this client's queue during the load, so both players restart and neither
+        // loses the partner's spawn. (A master-only LoadLevel does NOT reload
+        // clients on a same-scene restart - the synced scene property is unchanged.)
         PhotonNetwork.LoadLevel(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 

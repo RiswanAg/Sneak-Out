@@ -85,8 +85,7 @@ public class Level3VictoryUI : MonoBehaviourPunCallbacks
         }
         
         // Show cursor
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
+        CursorManager.SetFree();
     }
     
     /// <summary>
@@ -103,37 +102,50 @@ public class Level3VictoryUI : MonoBehaviourPunCallbacks
     }
     
     /// <summary>
-    /// Restart Level 3
+    /// Restart Level 3 — either player can click; the Master Client reloads for everyone
     /// </summary>
     void OnRestartClicked()
     {
-        if (!PhotonNetwork.IsMasterClient)
-        {
-            GameLog.Log("[VictoryUI] Only Master Client can restart!");
-            return;
-        }
-        
-        GameLog.Log("<color=yellow>[VictoryUI] Restarting Level 3...</color>");
-        
+        GameLog.Log("<color=yellow>[VictoryUI] Restart requested...</color>");
+
         // Stop music
         if (audioSource != null)
             audioSource.Stop();
-        
-        // Reload Level 3
+
+        // Broadcast so every client can clear its own player before the reload;
+        // only the master performs the actual (synced) scene load.
+        photonView.RPC("RPC_RequestRestart", RpcTarget.All);
+    }
+
+    [PunRPC]
+    void RPC_RequestRestart()
+    {
+        GameLog.Log("<color=yellow>[VictoryUI] Restart received...</color>");
+
+        // Clear our stale player reference. Do NOT PhotonNetwork.Destroy here - it
+        // races with the master's LoadLevel and throws "Destroy Failed. Could not
+        // find PhotonView...". The reload destroys players; they respawn on load.
+        PhotonNetwork.LocalPlayer.TagObject = null;
+
+        // EVERY client reloads itself. LoadLevel always loads locally and pauses
+        // this client's queue during the load, so both players restart and neither
+        // loses the partner's spawn. (A master-only LoadLevel does NOT reload
+        // clients on a same-scene restart - the synced scene property is unchanged.)
         PhotonNetwork.LoadLevel(SceneManager.GetActiveScene().name);
     }
-    
+
     /// <summary>
-    /// Return to main menu
+    /// Return to main menu — either player can click; both players leave the room
     /// </summary>
     void OnMenuClicked()
     {
-        if (!PhotonNetwork.IsMasterClient)
-        {
-            GameLog.Log("[VictoryUI] Only Master Client can return to menu!");
-            return;
-        }
-        
+        GameLog.Log("<color=yellow>[VictoryUI] Menu requested...</color>");
+        photonView.RPC("RPC_ReturnToMenu", RpcTarget.All);
+    }
+
+    [PunRPC]
+    void RPC_ReturnToMenu()
+    {
         GameLog.Log("<color=yellow>[VictoryUI] Returning to menu...</color>");
 
         // Stop music

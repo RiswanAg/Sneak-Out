@@ -170,8 +170,7 @@ public class Level1Manager : MonoBehaviourPunCallbacks
             rb.isKinematic = true;
         }
         
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        CursorManager.SetFree();
     }
     
     void ShowIndividualGameOver(GameObject player)
@@ -294,40 +293,37 @@ public class Level1Manager : MonoBehaviourPunCallbacks
     [PunRPC]
     void RPC_RestartForEveryone()
     {
-        GameLog.Log("[Level1] RPC_RestartForEveryone received! Reloading scene...");
-        
+        GameLog.Log("[Level1] RPC_RestartForEveryone received!");
+        isRestarting = true;
+
         Time.timeScale = 1f;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        
+        CursorManager.SetLocked();
+
         if (individualGameOverPanel != null)
             individualGameOverPanel.SetActive(false);
-        
+
         CleanupBeforeRestart();
-        StartCoroutine(DelayedSceneLoad());
+
+        // EVERY client reloads itself. PhotonNetwork.LoadLevel always loads
+        // locally AND pauses this client's network queue during the load, so both
+        // players restart and neither loses the partner's spawn to the race. (A
+        // master-only LoadLevel does NOT reload clients on a same-scene restart -
+        // the synced scene property doesn't change, so nobody is told to follow.)
+        PhotonNetwork.LoadLevel(SceneManager.GetActiveScene().name);
     }
-    
+
     void CleanupBeforeRestart()
     {
         GameLog.Log("[Level1] Cleaning up before restart...");
-        
-        if (PhotonNetwork.LocalPlayer.TagObject != null)
-        {
-            GameLog.Log("[Level1] Clearing TagObject reference");
-            PhotonNetwork.LocalPlayer.TagObject = null;
-        }
-        
+
+        // NOTE: do NOT PhotonNetwork.Destroy the player here - it races with the
+        // master's LoadLevel and throws "Destroy Failed. Could not find
+        // PhotonView...". The scene reload destroys players; PlayerSpawnerPun
+        // re-instantiates a fresh one on load.
+        PhotonNetwork.LocalPlayer.TagObject = null;
+
         // Reset any static NPC flags if you have them
         StudentNPC.ResetStaticFlags();
-    }
-    
-    IEnumerator DelayedSceneLoad()
-    {
-        yield return null;
-        yield return null;
-        
-        GameLog.Log("[Level1] Loading scene now...");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     
     // ==================== RETURN TO MENU ====================
